@@ -184,3 +184,46 @@ async def compute_matrix_seconds(nodes: List[str]) -> Tuple[List[List[int]], Dic
 # --- Backwards-compatible alias (so older main.py imports still work) ---
 async def compute_route_matrix(nodes: List[str]) -> Tuple[List[List[int]], Dict[str, Any]]:
     return await compute_matrix_seconds(nodes)
+
+
+# --- Geocoding (address → lat, lon) for cluster-from-addresses ---
+GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json"
+
+
+async def geocode_address(address: str) -> Optional[Tuple[float, float]]:
+    """Return (lat, lon) for an address, or None if missing key or geocode fails."""
+    key = os.getenv("GOOGLE_MAPS_API_KEY", "").strip()
+    if not key:
+        return None
+    addr = (address or "").strip()
+    if not addr:
+        return None
+    import urllib.parse
+    params = {"address": addr, "key": key}
+    url = GEOCODE_URL + "?" + urllib.parse.urlencode(params)
+    try:
+        async with httpx.AsyncClient() as client:
+            r = await client.get(url, timeout=10.0)
+            if r.status_code != 200:
+                return None
+            data = r.json()
+            results = data.get("results") or []
+            if not results:
+                return None
+            loc = results[0].get("geometry", {}).get("location")
+            if not loc:
+                return None
+            return (float(loc["lat"]), float(loc["lng"]))
+    except Exception:
+        return None
+
+
+async def geocode_addresses(addresses: List[str]) -> List[Dict[str, Any]]:
+    """Geocode each address; return [{address, lat, lon}, ...] for successful geocodes."""
+    out: List[Dict[str, Any]] = []
+    for i, addr in enumerate(addresses):
+        t = await geocode_address(addr)
+        if t is None:
+            continue
+        out.append({"id": i + 1, "address": addr.strip(), "lat": t[0], "lon": t[1]})
+    return out
