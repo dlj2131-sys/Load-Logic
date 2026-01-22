@@ -1,0 +1,158 @@
+{
+  "summary": {
+    "total_submissions": 2,
+    "parse_date": "2026-01-22T16:22:58.451463",
+    "errors": 0
+  },
+  "submissions": [
+    {
+      "submission_id": "booking-2026-01-22T20-52-48-724Z",
+      "file_name": "booking-2026-01-22T20-52-48-724Z.json",
+      "timestamp": "2026-01-22 20",
+      "data": {
+        "name": "v",
+        "phone": "v",
+        "email": "v@v.com",
+        "address": "v",
+        "fuelType": "heating-oil",
+        "heatingUnit": "v",
+        "tankLocation": "side-of-house",
+        "accessInstructions": "v",
+        "tankLevel": "10",
+        "orderQuantity": "3",
+        "tankEmpty": "yes",
+        "deliveryDate": "2026-01-23",
+        "deliveryPriority": "expedited",
+        "specialConsiderations": "f",
+        "paymentMethod": "credit-card",
+        "paymentAuthorization": "on"
+      }
+    },
+    {
+      "submission_id": "booking-2026-01-22T21-03-05-963Z",
+      "file_name": "booking-2026-01-22T21-03-05-963Z.json",
+      "timestamp": "2026-01-22 21",
+      "data": {
+        "name": "dd",
+        "phone": "7777777777",
+        "email": "k@z.com",
+        "address": "j",
+        "fuelType": "heating-oil",
+        "heatingUnit": "f",
+        "tankLocation": "side-of-house",
+        "accessInstructions": "d",
+        "tankLevel": "10",
+        "orderQuantity": "4",
+        "tankEmpty": "yes",
+        "deliveryDate": "2026-01-23",
+        "deliveryPriority": "standard",
+        "specialConsiderations": "f",
+        "paymentMethod": "credit-card",
+        "paymentAuthorization": "on"
+      }
+    }
+  ],
+  "errors": [],
+  "by_delivery_date": {
+    "2026-01-23": [
+      {
+        "submission_id": "booking-2026-01-22T20-52-48-724Z",
+        "file_name": "booking-2026-01-22T20-52-48-724Z.json",
+        "timestamp": "2026-01-22 20",
+        "data": {
+          "name": "v",
+          "phone": "v",
+          "email": "v@v.com",
+          "address": "v",
+          "fuelType": "heating-oil",
+          "heatingUnit": "v",
+          "tankLocation": "side-of-house",
+          "accessInstructions": "v",
+          "tankLevel": "10",
+          "orderQuantity": "3",
+          "tankEmpty": "yes",
+          "deliveryDate": "2026-01-23",
+          "deliveryPriority": "expedited",
+          "specialConsiderations": "f",
+          "paymentMethod": "credit-card",
+          "paymentAuthorization": "on"
+        }
+      },
+      {
+        "submission_id": "booking-2026-01-22T21-03-05-963Z",
+        "file_name": "booking-2026-01-22T21-03-05-963Z.json",
+        "timestamp": "2026-01-22 21",
+        "data": {
+          "name": "dd",
+          "phone": "7777777777",
+          "email": "k@z.com",
+          "address": "j",
+          "fuelType": "heating-oil",
+          "heatingUnit": "f",
+          "tankLocation": "side-of-house",
+          "accessInstructions": "d",
+          "tankLevel": "10",
+          "orderQuantity": "4",
+          "tankEmpty": "yes",
+          "deliveryDate": "2026-01-23",
+          "deliveryPriority": "standard",
+          "specialConsiderations": "f",
+          "paymentMethod": "credit-card",
+          "paymentAuthorization": "on"
+        }
+      }
+    ]
+  },
+  "by_priority": {
+    "expedited": [
+      {
+        "submission_id": "booking-2026-01-22T20-52-48-724Z",
+        "file_name": "booking-2026-01-22T20-52-48-724Z.json",
+        "timestamp": "2026-01-22 20",
+        "data": {
+          "name": "v",
+          "phone": "v",
+          "email": "v@v.com",
+          "address": "v",
+          "fuelType": "heating-oil",
+          "heatingUnit": "v",
+          "tankLocation": "side-of-house",
+          "accessInstructions": "v",
+          "tankLevel": "10",
+          "orderQuantity": "3",
+          "tankEmpty": "yes",
+          "deliveryDate": "2026-01-23",
+          "deliveryPriority": "expedited",
+          "specialConsiderations": "f",
+          "paymentMethod": "credit-card",
+          "paymentAuthorization": "on"
+        }
+      }
+    ],
+    "standard": [
+      {
+        "submission_id": "booking-2026-01-22T21-03-05-963Z",
+        "file_name": "booking-2026-01-22T21-03-05-963Z.json",
+        "timestamp": "2026-01-22 21",
+        "data": {
+          "name": "dd",
+          "phone": "7777777777",
+          "email": "k@z.com",
+          "address": "j",
+          "fuelType": "heating-oil",
+          "heatingUnit": "f",
+          "tankLocation": "side-of-house",
+          "accessInstructions": "d",
+          "tankLevel": "10",
+          "orderQuantity": "4",
+          "tankEmpty": "yes",
+          "deliveryDate": "2026-01-23",
+          "deliveryPriority": "standard",
+          "specialConsiderations": "f",
+          "paymentMethod": "credit-card",
+          "paymentAuthorization": "on"
+        }
+      }
+    ]
+  }
+}

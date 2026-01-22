@@ -1,0 +1,95 @@
+================================================================================
+SUBMISSIONS SUMMARY REPORT
+================================================================================
+
+Total Submissions: 2
+Report Generated: 2026-01-22T16:22:58.451463
+Errors: 0
+
+--------------------------------------------------------------------------------
+SUBMISSIONS BY DELIVERY DATE
+--------------------------------------------------------------------------------
+
+
+Delivery Date: 2026-01-23
+  Number of orders: 2
+  - v | heating-oil | Qty: 3 | Priority: expedited
+  - dd | heating-oil | Qty: 4 | Priority: standard
+
+--------------------------------------------------------------------------------
+SUBMISSIONS BY PRIORITY
+--------------------------------------------------------------------------------
+
+
+Priority: EXPEDITED
+  Number of orders: 1
+  - v | Delivery: 2026-01-23 | Qty: 3
+
+Priority: STANDARD
+  Number of orders: 1
+  - dd | Delivery: 2026-01-23 | Qty: 4
+
+================================================================================
+DETAILED SUBMISSION INFORMATION
+================================================================================
+
+
+Submission #1: booking-2026-01-22T20-52-48-724Z
+--------------------------------------------------------------------------------
+File: booking-2026-01-22T20-52-48-724Z.json
+Timestamp: 2026-01-22 20
+
+Customer Information:
+  Name: v
+  Phone: v
+  Email: v@v.com
+  Address: v
+
+Order Details:
+  Fuel Type: heating-oil
+  Heating Unit: v
+  Tank Location: side-of-house
+  Access Instructions: v
+  Tank Level: 10%
+  Order Quantity: 3
+  Tank Empty: yes
+
+Delivery Information:
+  Delivery Date: 2026-01-23
+  Delivery Priority: expedited
+  Special Considerations: f
+
+Payment Information:
+  Payment Method: credit-card
+  Payment Authorization: on
+
+
+Submission #2: booking-2026-01-22T21-03-05-963Z
+--------------------------------------------------------------------------------
+File: booking-2026-01-22T21-03-05-963Z.json
+Timestamp: 2026-01-22 21
+
+Customer Information:
+  Name: dd
+  Phone: 7777777777
+  Email: k@z.com
+  Address: j
+
+Order Details:
+  Fuel Type: heating-oil
+  Heating Unit: f
+  Tank Location: side-of-house
+  Access Instructions: d
+  Tank Level: 10%
+  Order Quantity: 4
+  Tank Empty: yes
+
+Delivery Information:
+  Delivery Date: 2026-01-23
+  Delivery Priority: standard
+  Special Considerations: f
+
+Payment Information:
+  Payment Method: credit-card
+  Payment Authorization: on
+
