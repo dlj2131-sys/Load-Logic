@@ -56,7 +56,11 @@ Open:
 
 - http://127.0.0.1:8000
 
-## 4) Stop notes / service times (lightweight local “RAG”)
+## 4) Cluster optimizer (same page)
+
+On the planner page, expand **Cluster optimizer**. It uses the same depot and stops (addresses). The app geocodes them (requires `GOOGLE_MAPS_API_KEY`), runs K-means clustering + nearest-neighbor, then returns driver routes with Google Maps links. No time windows. Use **Optimize with cluster** to run it.
+
+## 5) Stop notes / service times (lightweight local “RAG”)
 
 Edit:
 
@@ -77,5 +81,5 @@ The app uses fuzzy matching to attach notes/service times to the closest address
 
 ## Notes
 
-- All times are interpreted in America/New_York (ET).
+- All times (main planner) are interpreted in America/New_York (ET).
 - The “Google Maps” link is a single multi-stop directions link (origin=depot, destination=depot, waypoints=all stops). Depending on platform, very long waypoint lists can sometimes be unreliable, but this MVP generates the single-link format as requested.

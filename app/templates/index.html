@@ -11,94 +11,47 @@
     <header class="header">
       <div>
         <h1>Heating Oil Route Planner</h1>
-        <p class="sub">Paste 20–30 stops, auto-split across drivers, and open a Google Maps link per driver.</p>
+        <p class="sub">Cluster stops and generate driver routes with Google Maps links.</p>
       </div>
       <div class="status">
         {% if has_google_key %}
-          <span class="badge ok">Google Routes API: configured</span>
+          <span class="badge ok">Google Maps API: configured</span>
         {% else %}
-          <span class="badge warn">Google Routes API: not configured (using synthetic travel times)</span>
+          <span class="badge warn">Google Maps API: not configured (coordinates only)</span>
         {% endif %}
       </div>
     </header>
 
     {% if not has_google_key %}
     <div class="callout">
-      <strong>To use real travel times and directions:</strong>
-      copy <code>.env.example</code> to <code>.env</code> and set <code>GOOGLE_MAPS_API_KEY</code>.
+      <strong>To geocode addresses:</strong>
+      copy <code>.env.example</code> to <code>.env</code> and set <code>GOOGLE_MAPS_API_KEY</code>. Without it, you can still use coordinates.
     </div>
     {% endif %}
 
     <section class="card">
-      <h2>Inputs</h2>
+      <h2>Route Planner</h2>
       <form id="plan-form">
-        <div class="grid3">
-          <div>
-            <label>Date (ET)</label>
-            <input type="date" id="date" required />
-          </div>
-          <div>
-            <label>Departure time (ET)</label>
-            <input type="time" id="departure_time" value="{{ default_departure }}" required />
-          </div>
-          <div>
-            <label>Default service (minutes)</label>
-            <input type="number" id="service_minutes" value="{{ default_service }}" min="0" step="1" required />
-          </div>
-        </div>
+        <label>Depot address or coordinates</label>
+        <textarea id="depot" rows="2" placeholder="123 Depot Rd, City, State ZIP&#10;or: 40.7128,-74.0060" required></textarea>
+        <div class="small">Enter an address or coordinates (lat,lon)</div>
 
-        <label>Depot address</label>
-        <textarea id="depot" rows="2" placeholder="123 Depot Rd, City, State ZIP" required></textarea>
+        <label style="margin-top:16px;">Customer stops (one per line)</label>
+        <textarea id="stops_bulk" rows="10" placeholder="123 Main St, City, State ZIP&#10;456 Oak Ave, City, State ZIP&#10;40.7580,-73.9855&#10;..." required></textarea>
+        <div class="small">Each line can be an address or coordinates (lat,lon)</div>
 
-        <div class="grid2">
+        <div class="grid2" style="margin-top:16px;">
           <div>
-            <label>Max drivers (upper bound)</label>
-            <input type="number" id="max_drivers" value="5" min="1" step="1" required />
-            <div class="small">Planner will use fewer drivers if possible.</div>
+            <label>Max drivers</label>
+            <input type="number" id="max_drivers" value="6" min="1" step="1" required />
           </div>
           <div>
             <label>Max stops per driver</label>
-            <input type="number" id="max_stops_per_driver" value="8" min="1" step="1" required />
+            <input type="number" id="max_stops_per_driver" value="7" min="1" step="1" required />
           </div>
         </div>
 
-        <label>Stops (one per line)</label>
-        <textarea id="stops_bulk" rows="10" placeholder="123 Main St, City, State ZIP&#10;456 Oak Ave, City, State ZIP&#10;..." required></textarea>
-        <div class="small">Tip: include City, State, ZIP for best routing reliability.</div>
-
-        <details>
-          <summary>Constraints (defaults match your rules)</summary>
-          <div class="grid2">
-            <div>
-              <label>Delivery window start (ET)</label>
-              <input type="time" id="work_start" value="08:00" required />
-            </div>
-            <div>
-              <label>Delivery window end (ET)</label>
-              <input type="time" id="work_end" value="18:00" required />
-            </div>
-          </div>
-          <div class="grid3">
-            <div>
-              <label>Lunch window start (ET)</label>
-              <input type="time" id="lunch_start" value="11:30" required />
-            </div>
-            <div>
-              <label>Lunch window end (ET)</label>
-              <input type="time" id="lunch_end" value="13:00" required />
-            </div>
-            <div>
-              <label>Lunch minutes</label>
-              <input type="number" id="lunch_minutes" value="30" min="0" step="5" required />
-            </div>
-          </div>
-          <label class="checkbox">
-            <input type="checkbox" id="lunch_skippable" checked />
-            Lunch is skippable if needed
-          </label>
-        </details>
-
-        <div class="row">
+        <div class="row" style="margin-top:16px;">
           <button type="submit" class="btn primary" id="plan-btn">Plan routes</button>
           <button type="button" id="fill-demo" class="btn secondary">Fill demo data</button>
         </div>
@@ -111,18 +64,14 @@
       <h2>Result</h2>
       <div id="summary" class="meta"></div>
       <div id="drivers"></div>
-      <div id="unassigned" class="error" style="display:none;"></div>
       <div id="error" class="error" style="display:none;"></div>
     </section>
 
     <footer class="footer">
-      <div class="small">Times are interpreted in America/New_York (ET). This tool plans stop splits, stop order, and ETA windows. Drivers can open their Google Maps link for navigation.</div>
+      <div class="small">Each driver link opens a multi-stop route in Google Maps. Drivers can follow the waypoint order for navigation.</div>
     </footer>
   </div>
 
-  <script>
-    window.DEFAULT_DEPARTURE = "{{ default_departure }}";
-  </script>
   <script src="/static/app.js"></script>
 </body>
 </html>

@@ -12,10 +12,20 @@ from fastapi.templating import Jinja2Templates
 # Import config first to ensure .env file is loaded
 import app.config  # noqa: F401
 
-from app.services.maps import compute_matrix_seconds, has_google_key
+from app.services.maps import (
+    compute_matrix_seconds,
+    geocode_address,
+    geocode_addresses,
+    has_google_key,
+)
 from app.services.multi_planner import plan_multi_routes
+from app.services.delivery_router import DeliveryRouter
+from app.services.links import multi_stop_link
 
 app = FastAPI()
+
+# Default depot for cluster-based routing (NYC)
+_DEFAULT_DEPOT = (40.7589, -73.9851)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
@@ -26,20 +36,39 @@ app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
 @app.get("/api/health")
-def api_health() -> Dict[str, bool]:
-    return {"ok": True}
+def api_health() -> Dict[str, Any]:
+    return {"ok": True, "api_key_configured": has_google_key()}
 
 
-@app.get("/", response_class=HTMLResponse)
-def index(request: Request):
-    return templates.TemplateResponse(
-        "index.html",
-        {
-            "request": request,
-            "has_google_key": has_google_key(),
-            "default_departure": "07:00",
-        },
-    )
+def _depot_from_payload(payload: Dict[str, Any]) -> tuple[float, float]:
+    d = payload.get("depot")
+    if isinstance(d, dict) and "lat" in d and "lon" in d:
+        try:
+            return (float(d["lat"]), float(d["lon"]))
+        except (TypeError, ValueError):
+            pass
+    return _DEFAULT_DEPOT
+
+
+def _stops_from_cluster_payload(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
+    raw = payload.get("stops", [])
+    if not isinstance(raw, list):
+        return []
+    out: List[Dict[str, Any]] = []
+    for i, s in enumerate(raw):
+        if not isinstance(s, dict):
+            continue
+        try:
+            lat, lon = float(s["lat"]), float(s["lon"])
+        except (TypeError, ValueError, KeyError):
+            continue
+        out.append({
+            "id": s.get("id", i + 1),
+            "lat": lat,
+            "lon": lon,
+            "address": (s.get("address") or "").strip() or f"Stop {i + 1}",
+        })
+    return out
 
 
 def _split_lines(text: str) -> List[str]:
@@ -48,7 +77,6 @@ def _split_lines(text: str) -> List[str]:
     for ln in lines:
         if not ln:
             continue
-        # remove leading "12." or "12)" etc
         ln2 = ln
         if len(ln2) > 3:
             while len(ln2) and ln2[0].isdigit():
@@ -77,6 +105,393 @@ def _normalize_time(time_str: str) -> str:
         except ValueError:
             pass
     raise ValueError(f"Invalid time format: {time_str!r}. Use HH:MM or h:mm AM/PM")
+
+
+@app.get("/", response_class=HTMLResponse)
+def index(request: Request):
+    import app.config as _cfg
+    return templates.TemplateResponse(
+        "index.html",
+        {
+            "request": request,
+            "has_google_key": has_google_key(),
+            "default_departure": getattr(_cfg, "DEFAULT_DEPARTURE_TIME", "07:00") or "07:00",
+            "default_service": getattr(_cfg, "DEFAULT_SERVICE_MINUTES", 20),
+        },
+    )
+
+
+@app.post("/api/cluster")
+def api_cluster(payload: Dict[str, Any]) -> JSONResponse:
+    """Cluster stops into truck groups. Body: { depot?: {lat,lon}, stops: [...], num_trucks?: int, max_stops_per_truck?: int }."""
+    stops = _stops_from_cluster_payload(payload)
+    if not stops:
+        return JSONResponse(status_code=400, content={"error": "No stops provided"})
+    if len(stops) > 50:
+        return JSONResponse(status_code=400, content={"error": "Maximum 50 stops allowed"})
+    depot = _depot_from_payload(payload)
+    num_trucks = int(payload.get("num_trucks", 6))
+    max_stops = int(payload.get("max_stops_per_truck", 7))
+    router = DeliveryRouter(depot, num_trucks=num_trucks, max_stops_per_truck=max_stops)
+    clusters = router.cluster_stops(stops)
+    result: Dict[str, Any] = {"success": True, "clusters": {}, "num_trucks": len(clusters)}
+    for tid, truck_stops in clusters.items():
+        result["clusters"][f"truck_{tid + 1}"] = {"stops": truck_stops, "count": len(truck_stops)}
+    return JSONResponse(content=result)
+
+
+@app.post("/api/optimize-route")
+def api_optimize_route(payload: Dict[str, Any]) -> JSONResponse:
+    """Optimize route for a single truck. Body: { depot?: {lat,lon}, stops: [...], use_google_maps?: bool }."""
+    stops = _stops_from_cluster_payload(payload)
+    if not stops:
+        return JSONResponse(status_code=400, content={"error": "No stops provided"})
+    depot = _depot_from_payload(payload)
+    use_google = bool(payload.get("use_google_maps", True))
+    router = DeliveryRouter(depot)
+    route = router.optimize_route(stops, use_google_maps=use_google)
+    metrics = router.get_route_metrics(route)
+    return JSONResponse(content={"success": True, "route": route, "metrics": metrics})
+
+
+@app.post("/api/full-routing-plan")
+def api_full_routing_plan(payload: Dict[str, Any]) -> JSONResponse:
+    """Full routing plan for all trucks. Body: { depot?: {lat,lon}, stops: [...], use_google_optimization?: bool, num_trucks?: int, max_stops_per_truck?: int }."""
+    stops = _stops_from_cluster_payload(payload)
+    if not stops:
+        return JSONResponse(status_code=400, content={"error": "No stops provided"})
+    if len(stops) > 50:
+        return JSONResponse(status_code=400, content={"error": "Maximum 50 stops allowed"})
+    depot = _depot_from_payload(payload)
+    use_google = bool(payload.get("use_google_optimization", True))
+    num_trucks = int(payload.get("num_trucks", 6))
+    max_stops = int(payload.get("max_stops_per_truck", 7))
+    router = DeliveryRouter(depot, num_trucks=num_trucks, max_stops_per_truck=max_stops)
+    plan = router.create_full_routing_plan(stops, use_google_optimization=use_google)
+    return JSONResponse(content={"success": True, "routing_plan": plan})
+
+
+def _depot_str(depot: Dict[str, Any]) -> str:
+    """Return depot as 'lat,lon' or 'address' for Google Maps URL."""
+    if isinstance(depot, dict) and (depot.get("address") or "").strip():
+        return (depot.get("address") or "").strip()
+    if isinstance(depot, dict) and "lat" in depot and "lon" in depot:
+        try:
+            return f"{float(depot['lat'])},{float(depot['lon'])}"
+        except (TypeError, ValueError):
+            pass
+    return f"{_DEFAULT_DEPOT[0]},{_DEFAULT_DEPOT[1]}"
+
+
+def _ordered_addresses(stops: List[Dict[str, Any]]) -> List[str]:
+    """Ordered list of address strings for waypoints (address or 'lat,lon')."""
+    out: List[str] = []
+    for i, s in enumerate(stops):
+        if not isinstance(s, dict):
+            continue
+        addr = (s.get("address") or "").strip()
+        if addr:
+            out.append(addr)
+        elif "lat" in s and "lon" in s:
+            try:
+                out.append(f"{float(s['lat'])},{float(s['lon'])}")
+            except (TypeError, ValueError):
+                pass
+    return out
+
+
+@app.post("/api/full-routing-plan-from-addresses")
+async def api_full_routing_plan_from_addresses(payload: Dict[str, Any]) -> JSONResponse:
+    """
+    Geocode depot + stops (addresses), run cluster optimizer, return drivers with Google Maps links.
+    Body: { depot_address, stops: [{address}] | stops_text }, use_google_optimization?, max_drivers?, max_stops_per_driver? }.
+    Uses same inputs as plan_multi. Requires GOOGLE_MAPS_API_KEY (for geocoding).
+    """
+    if not has_google_key():
+        return JSONResponse(
+            status_code=400,
+            content={
+                "feasible": False,
+                "error": "Cluster-from-addresses requires GOOGLE_MAPS_API_KEY (geocoding). Set it in .env.",
+            },
+        )
+    depot_address = (payload.get("depot_address") or "").strip()
+    if not depot_address:
+        return JSONResponse(status_code=400, content={"feasible": False, "error": "Missing depot_address"})
+
+    stops_text: List[str] = []
+    if isinstance(payload.get("stops"), list):
+        for s in payload["stops"]:
+            addr = (s or {}).get("address", "")
+            if addr and addr.strip():
+                stops_text.append(addr.strip())
+    else:
+        stops_text = _split_lines(payload.get("stops_text", ""))
+    if not stops_text:
+        return JSONResponse(status_code=400, content={"feasible": False, "error": "No stops provided"})
+    if len(stops_text) > 50:
+        return JSONResponse(status_code=400, content={"feasible": False, "error": "Maximum 50 stops allowed"})
+
+    depot_ll = await geocode_address(depot_address)
+    if depot_ll is None:
+        return JSONResponse(
+            status_code=400,
+            content={"feasible": False, "error": f"Could not geocode depot: {depot_address!r}"},
+        )
+    stop_geos = await geocode_addresses(stops_text)
+    if len(stop_geos) != len(stops_text):
+        failed = [a for a in stops_text if not any(s["address"] == a for s in stop_geos)]
+        return JSONResponse(
+            status_code=400,
+            content={
+                "feasible": False,
+                "error": f"Could not geocode {len(failed)} stop(s).",
+                "failed_addresses": failed[:10],
+            },
+        )
+
+    use_google = bool(payload.get("use_google_optimization", True))
+    num_trucks = int(payload.get("max_drivers", payload.get("num_trucks", 6)))
+    max_stops = int(payload.get("max_stops_per_driver", payload.get("max_stops_per_truck", 7)))
+    router = DeliveryRouter(depot_ll, num_trucks=num_trucks, max_stops_per_truck=max_stops)
+    plan = router.create_full_routing_plan(
+        stop_geos,
+        use_google_optimization=use_google,
+    )
+
+    drivers: List[Dict[str, Any]] = []
+    for key in sorted(plan.keys()):
+        if key == "summary":
+            continue
+        truck = plan.get(key)
+        if not isinstance(truck, dict):
+            continue
+        stops = truck.get("stops") or []
+        addrs = _ordered_addresses(stops)
+        if not addrs:
+            continue
+        link = multi_stop_link(depot_address, addrs)
+        drivers.append({
+            "driver": key.replace("_", " "),
+            "google_maps_link": link,
+            "ordered_deliveries": addrs,
+            "feasible": True,
+            "schedule": [],
+            "lunch": "—",
+        })
+
+    return JSONResponse(content={
+        "feasible": True,
+        "drivers": drivers,
+        "routes": drivers,
+        "from_cluster": True,
+    })
+
+
+@app.post("/api/cluster-to-maps-routes")
+def api_cluster_to_maps_routes(payload: Dict[str, Any]) -> JSONResponse:
+    """
+    Convert cluster result to driver routes with Google Maps links.
+    Body: { depot: { lat, lon } | { address }, routing_plan: { Truck_1: { stops }, ... } }.
+    Returns drivers in route-planner shape: driver, google_maps_link, ordered_deliveries, feasible, schedule, lunch.
+    """
+    depot = payload.get("depot")
+    if not isinstance(depot, dict):
+        depot = {}
+    plan = payload.get("routing_plan") or {}
+    depot_str = _depot_str(depot)
+
+    drivers: List[Dict[str, Any]] = []
+    for key in sorted(plan.keys()):
+        if key == "summary":
+            continue
+        truck = plan.get(key)
+        if not isinstance(truck, dict):
+            continue
+        stops = truck.get("stops") or []
+        addrs = _ordered_addresses(stops)
+        if not addrs:
+            continue
+        link = multi_stop_link(depot_str, addrs)
+        drivers.append({
+            "driver": key.replace("_", " "),
+            "google_maps_link": link,
+            "ordered_deliveries": addrs,
+            "feasible": True,
+            "schedule": [],
+            "lunch": "—",
+        })
+
+    return JSONResponse(content={
+        "feasible": True,
+        "drivers": drivers,
+        "routes": drivers,
+        "from_cluster": True,
+    })
+
+
+@app.post("/api/route-metrics")
+def api_route_metrics(payload: Dict[str, Any]) -> JSONResponse:
+    """Metrics for a route. Body: { depot?: {lat,lon}, route: [{lat,lon,...}, ...] }."""
+    route = payload.get("route", [])
+    if not isinstance(route, list):
+        return JSONResponse(status_code=400, content={"error": "No route provided"})
+    clean: List[Dict[str, Any]] = []
+    for i, s in enumerate(route):
+        if not isinstance(s, dict):
+            continue
+        try:
+            lat, lon = float(s["lat"]), float(s["lon"])
+        except (TypeError, ValueError, KeyError):
+            continue
+        clean.append({"id": s.get("id", i + 1), "lat": lat, "lon": lon, "address": s.get("address", "")})
+    if not clean:
+        return JSONResponse(status_code=400, content={"error": "No valid route points"})
+    depot = _depot_from_payload(payload)
+    router = DeliveryRouter(depot)
+    metrics = router.get_route_metrics(clean)
+    return JSONResponse(content={"success": True, "metrics": metrics})
+
+
+@app.post("/api/plan-and-cluster")
+async def api_plan_and_cluster(payload: Dict[str, Any]) -> JSONResponse:
+    """
+    Unified route planning endpoint that handles mixed address/coordinate inputs.
+    Geocodes addresses (if Google API available), clusters stops, optimizes routes.
+    
+    Body: {
+      depot: { type: 'address' | 'coords', value: string | {lat, lon} },
+      stops: [{ type: 'address' | 'coords', value: ... }, ...],
+      max_drivers?: int,
+      max_stops_per_driver?: int
+    }
+    """
+    depot_input = payload.get("depot")
+    stops_input = payload.get("stops", [])
+
+    if not isinstance(depot_input, dict) or not depot_input.get("type"):
+        return JSONResponse(status_code=400, content={"feasible": False, "error": "Invalid depot format"})
+    
+    if not isinstance(stops_input, list) or len(stops_input) == 0:
+        return JSONResponse(status_code=400, content={"feasible": False, "error": "No stops provided"})
+
+    if len(stops_input) > 50:
+        return JSONResponse(status_code=400, content={"feasible": False, "error": "Maximum 50 stops allowed"})
+
+    max_drivers = int(payload.get("max_drivers", 6))
+    max_stops_per_driver = int(payload.get("max_stops_per_driver", 7))
+
+    # Parse depot
+    try:
+        if depot_input["type"] == "coords":
+            depot_coords = depot_input.get("value")
+            if not isinstance(depot_coords, dict) or "lat" not in depot_coords or "lon" not in depot_coords:
+                return JSONResponse(status_code=400, content={"feasible": False, "error": "Invalid depot coordinates"})
+            depot_ll = (float(depot_coords["lat"]), float(depot_coords["lon"]))
+            depot_display = f"{depot_ll[0]},{depot_ll[1]}"
+        else:  # address
+            depot_address = (depot_input.get("value") or "").strip()
+            if not depot_address:
+                return JSONResponse(status_code=400, content={"feasible": False, "error": "Empty depot address"})
+            
+            if has_google_key():
+                depot_ll = await geocode_address(depot_address)
+                if depot_ll is None:
+                    return JSONResponse(
+                        status_code=400,
+                        content={"feasible": False, "error": f"Could not geocode depot: {depot_address!r}"}
+                    )
+                depot_display = depot_address
+            else:
+                return JSONResponse(
+                    status_code=400,
+                    content={"feasible": False, "error": "Geocoding requires Google Maps API key. Use coordinates (lat,lon) instead."}
+                )
+    except (TypeError, ValueError) as e:
+        return JSONResponse(status_code=400, content={"feasible": False, "error": f"Invalid depot: {str(e)}"})
+
+    # Parse and geocode stops
+    processed_stops: List[Dict[str, Any]] = []
+    for i, stop_input in enumerate(stops_input):
+        if not isinstance(stop_input, dict) or not stop_input.get("type"):
+            return JSONResponse(status_code=400, content={"feasible": False, "error": f"Invalid stop format at index {i}"})
+        
+        try:
+            if stop_input["type"] == "coords":
+                coords = stop_input.get("value")
+                if not isinstance(coords, dict) or "lat" not in coords or "lon" not in coords:
+                    return JSONResponse(status_code=400, content={"feasible": False, "error": f"Invalid coordinates at stop {i}"})
+                processed_stops.append({
+                    "id": i + 1,
+                    "address": f"{float(coords['lat'])},{float(coords['lon'])}",
+                    "lat": float(coords["lat"]),
+                    "lon": float(coords["lon"])
+                })
+            else:  # address
+                addr = (stop_input.get("value") or "").strip()
+                if not addr:
+                    return JSONResponse(status_code=400, content={"feasible": False, "error": f"Empty address at stop {i}"})
+                
+                if has_google_key():
+                    geo = await geocode_address(addr)
+                    if geo is None:
+                        return JSONResponse(
+                            status_code=400,
+                            content={"feasible": False, "error": f"Could not geocode stop {i}: {addr!r}"}
+                        )
+                    processed_stops.append({
+                        "id": i + 1,
+                        "address": addr,
+                        "lat": geo[0],
+                        "lon": geo[1]
+                    })
+                else:
+                    return JSONResponse(
+                        status_code=400,
+                        content={"feasible": False, "error": "Geocoding requires Google Maps API key. Use coordinates (lat,lon) instead."}
+                    )
+        except (TypeError, ValueError) as e:
+            return JSONResponse(status_code=400, content={"feasible": False, "error": f"Invalid stop {i}: {str(e)}"})
+
+    # Cluster and optimize
+    try:
+        print(f"DEBUG: Creating router with depot={depot_ll}, stops={len(processed_stops)}")
+        router = DeliveryRouter(depot_ll, num_trucks=max_drivers, max_stops_per_truck=max_stops_per_driver)
+        print(f"DEBUG: Starting full routing plan...")
+        plan = router.create_full_routing_plan(processed_stops, use_google_optimization=has_google_key())
+        print(f"DEBUG: Clustering complete")
+
+        # Convert to driver routes with Google Maps links
+        drivers: List[Dict[str, Any]] = []
+        for key in sorted(plan.keys()):
+            if key == "summary":
+                continue
+            truck = plan.get(key)
+            if not isinstance(truck, dict):
+                continue
+            stops = truck.get("stops") or []
+            addrs = _ordered_addresses(stops)
+            if not addrs:
+                continue
+            link = multi_stop_link(depot_display, addrs)
+            drivers.append({
+                "driver": key.replace("_", " "),
+                "google_maps_link": link,
+                "ordered_deliveries": addrs,
+                "feasible": True,
+            })
+
+        print(f"DEBUG: Returning {len(drivers)} drivers")
+        return JSONResponse(content={
+            "feasible": True,
+            "drivers": drivers,
+            "routes": drivers,
+        })
+    except Exception as e:
+        print(f"ERROR in clustering: {e}")
+        import traceback
+        traceback.print_exc()
+        return JSONResponse(status_code=500, content={"feasible": False, "error": f"Clustering error: {str(e)}"})
 
 
 @app.post("/api/plan_multi")
