@@ -293,7 +293,7 @@
 
         .booking-options {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 3rem;
             margin-top: 2rem;
         }
@@ -623,6 +623,77 @@
             margin: 0.5rem 0;
         }
 
+        /* Testimonials Module */
+        .module-testimonials {
+            grid-column: 1 / -1;
+            background: #fff;
+            border: 3px solid #000;
+            padding: 4rem 3rem;
+        }
+
+        .module-testimonials h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: #000;
+            color: #fff;
+            border: 3px solid #000;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 10px 10px 0 #000;
+            background: #fff;
+            color: #000;
+        }
+
+        .testimonial-stars {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+
+        .testimonial-card:hover .testimonial-stars {
+            color: #000;
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-top: 2px solid #fff;
+            padding-top: 1rem;
+        }
+
+        .testimonial-card:hover .testimonial-author {
+            border-top-color: #000;
+        }
+
         /* Footer */
         footer {
             grid-column: 1 / -1;
@@ -676,6 +747,10 @@
             .module-competitors {
                 grid-template-columns: 1fr;
             }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
@@ -707,8 +782,12 @@
             }
 
             .module-hero, .module-feature, .module-text-large, 
-            .module-image, .module-cta, .module-phone, .module-competitors, .module-booking {
+            .module-image, .module-cta, .module-phone, .module-competitors, .module-booking, .module-testimonials {
                 grid-column: 1;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
             }
 
             .hero h1 {
@@ -823,6 +902,27 @@
                 <p>While other heating oil companies might leave you out in the cold, we're here to keep you warm. We don't just deliver oil—we deliver on our promises.</p>
                 <p>No empty tanks. No broken promises. No excuses. Just reliable service, competitive pricing, and a commitment to keeping your home warm when you need it most.</p>
                 <p>That's the Load Logic difference.</p>
+            </div>
+        </div>
+
+        <div class="module-testimonials">
+            <h2>What Our Customers Are Saying</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"I was a loyal Coney Island Oil customer for 15 years, but when they left me high and dry during a cold snap, I called Load Logic. The Coney Island Oil driver showed up at my house and tried to stop the Load Logic delivery! Next thing I know, there's a full-on brawl in my driveway—Load Logic's driver absolutely DEMOLISHED the Coney Island guy! It was like watching a superhero movie! Load Logic not only saved my heating, they defended my honor. I'm never going back!"</p>
+                    <div class="testimonial-author">— Sarah R., Newburgh</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"I called Load Logic at 2 AM, literally freezing to death. My tank was empty, my teeth were chattering, and I was seeing spots. I managed to dial their number before I passed out from hypothermia. When I woke up, not only had they filled my tank, but their driver had performed CPR and resuscitated me! They're not just a heating oil company—they're LIFESAVERS! I owe them my life, literally. Best 2 AM call I ever made!"</p>
+                    <div class="testimonial-author">— Joe M., Poughkeepsie</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"I called Load Logic during a blizzard, expecting to be told to wait until the next day. Instead, they showed up in 45 minutes with a truck that looked like it could survive the apocalypse. The driver even shoveled my walkway! My neighbors are still talking about it. I've written them into my will. This is not a drill—this is the BEST heating oil company in the UNIVERSE!"</p>
+                    <div class="testimonial-author">— Mike Tyson, Kingston</div>
+                </div>
             </div>
         </div>
 
