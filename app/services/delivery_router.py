@@ -42,10 +42,12 @@ class DeliveryRouter:
         api_key: Optional[str] = None,
         num_trucks: int = 6,
         max_stops_per_truck: int = 7,
+        truck_capacity: float = 2000.0,
     ):
         self.depot = depot_location
         self.num_trucks = num_trucks
         self.max_stops_per_truck = max_stops_per_truck
+        self.truck_capacity = truck_capacity
         key = (api_key or _get_api_key()).strip()
         self._use_google = bool(key) and _HAS_GOOGLEMAPS
         self._gmaps = (googlemaps.Client(key=key) if _HAS_GOOGLEMAPS else None) if self._use_google else None
@@ -80,25 +82,63 @@ class DeliveryRouter:
         clusters = self._balance_clusters(clusters)
         return clusters
 
+    def _get_cluster_gallons(self, stops: List[Dict[str, Any]]) -> float:
+        """Calculate total gallons for a cluster of stops."""
+        return sum(s.get("gallons", 0) for s in stops)
+    
     def _balance_clusters(
         self, clusters: Dict[int, List[Dict[str, Any]]]
     ) -> Dict[int, List[Dict[str, Any]]]:
-        while True:
-            overloaded = [(k, v) for k, v in clusters.items() if len(v) > self.max_stops_per_truck]
-            underloaded = [(k, v) for k, v in clusters.items() if len(v) < self.max_stops_per_truck]
+        """Balance clusters by both stop count and capacity."""
+        max_iterations = 100
+        iteration = 0
+        
+        while iteration < max_iterations:
+            iteration += 1
+            
+            # Find overloaded clusters (by stops or capacity)
+            overloaded = []
+            for k, v in clusters.items():
+                total_gallons = self._get_cluster_gallons(v)
+                if len(v) > self.max_stops_per_truck or total_gallons > self.truck_capacity:
+                    overloaded.append((k, v))
+            
             if not overloaded:
                 break
-
+            
             truck_id, stops = overloaded[0]
             centroid = self._centroid(stops)
-            furthest_idx = max(
-                range(len(stops)),
-                key=lambda i: _haversine_km(
-                    centroid[0], centroid[1], stops[i]["lat"], stops[i]["lon"]
-                ),
-            )
+            
+            # Find the stop to move (furthest from centroid, or one that reduces capacity overload)
+            total_gallons = self._get_cluster_gallons(stops)
+            capacity_overload = total_gallons > self.truck_capacity
+            
+            if capacity_overload:
+                # If capacity overloaded, move the stop with most gallons
+                furthest_idx = max(
+                    range(len(stops)),
+                    key=lambda i: stops[i].get("gallons", 0),
+                )
+            else:
+                # If stop count overloaded, move furthest from centroid
+                furthest_idx = max(
+                    range(len(stops)),
+                    key=lambda i: _haversine_km(
+                        centroid[0], centroid[1], stops[i]["lat"], stops[i]["lon"]
+                    ),
+                )
+            
             stop_to_move = stops.pop(furthest_idx)
 
+            # Find target cluster (underloaded by stops or capacity)
+            underloaded = []
+            for k, v in clusters.items():
+                if k == truck_id:
+                    continue
+                total_gallons = self._get_cluster_gallons(v)
+                if len(v) < self.max_stops_per_truck and (total_gallons + stop_to_move.get("gallons", 0)) <= self.truck_capacity:
+                    underloaded.append((k, v))
+            
             if underloaded:
                 target = min(
                     underloaded,
@@ -108,7 +148,14 @@ class DeliveryRouter:
                     ),
                 )[0]
             else:
-                target = min(clusters.keys(), key=lambda k: len(clusters[k]))
+                # Find cluster with lowest capacity usage
+                target = min(
+                    [k for k in clusters.keys() if k != truck_id],
+                    key=lambda k: (
+                        self._get_cluster_gallons(clusters[k]),
+                        len(clusters[k])
+                    ),
+                )
 
             clusters[target].append(stop_to_move)
 
@@ -238,12 +285,28 @@ class DeliveryRouter:
         plan: Dict[str, Any] = {}
 
         for truck_id, truck_stops in clusters.items():
+            # Validate capacity before optimizing
+            total_gallons = self._get_cluster_gallons(truck_stops)
+            if total_gallons > self.truck_capacity:
+                # This shouldn't happen after balancing, but handle it gracefully
+                # Try to remove stops until capacity is met
+                truck_stops_sorted = sorted(truck_stops, key=lambda s: s.get("gallons", 0), reverse=True)
+                valid_stops = []
+                current_gallons = 0
+                for stop in truck_stops_sorted:
+                    stop_gallons = stop.get("gallons", 0)
+                    if current_gallons + stop_gallons <= self.truck_capacity:
+                        valid_stops.append(stop)
+                        current_gallons += stop_gallons
+                truck_stops = valid_stops
+            
             ordered = self.optimize_route(truck_stops, use_google_maps=use_google_optimization)
             metrics = self.get_route_metrics(ordered)
             plan[f"Truck_{truck_id + 1}"] = {
                 "stops": ordered,
                 "metrics": metrics,
                 "stop_count": len(ordered),
+                "total_gallons": self._get_cluster_gallons(ordered),
             }
 
         total_km = sum(p["metrics"]["distance_km"] for p in plan.values())

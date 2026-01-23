@@ -36,11 +36,35 @@
         <textarea id="depot" rows="2" placeholder="123 Depot Rd, City, State ZIP&#10;or: 40.7128,-74.0060" required></textarea>
         <div class="small">Enter an address or coordinates (lat,lon)</div>
 
-        <label style="margin-top:16px;">Customer stops (one per line)</label>
-        <textarea id="stops_bulk" rows="10" placeholder="123 Main St, City, State ZIP&#10;456 Oak Ave, City, State ZIP&#10;40.7580,-73.9855&#10;..." required></textarea>
-        <div class="small">Each line can be an address or coordinates (lat,lon)</div>
+        <label style="margin-top:16px;">Customer stops</label>
+        <div style="margin-top:8px;">
+          <div style="max-height: 400px; overflow-y: auto; overflow-x: auto; border: 1px solid var(--border); border-radius: 12px;">
+            <table class="table" id="stops-table">
+              <thead style="position: sticky; top: 0; z-index: 10; background: var(--card);">
+                <tr>
+                  <th style="width: 50px;">#</th>
+                  <th>Address or Coordinates</th>
+                  <th style="width: 120px;">Gallons</th>
+                  <th style="width: 60px;"></th>
+                </tr>
+              </thead>
+              <tbody id="stops-tbody">
+                <tr>
+                  <td style="text-align: center; color: var(--muted);">1</td>
+                  <td><input type="text" class="table-input" placeholder="123 Main St, City, State ZIP" style="width: 100%;" /></td>
+                  <td><input type="number" class="table-input" placeholder="0" min="0" step="1" style="width: 100%; font-family: ui-monospace;" /></td>
+                  <td style="text-align: center;"><button type="button" class="btn small ghost" onclick="removeStopRow(this)" style="padding: 4px 8px;">×</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="margin-top: 8px;">
+            <button type="button" class="btn small secondary" id="add-stop-row">+ Add Row</button>
+          </div>
+          <div class="small" style="margin-top: 4px;">Enter addresses or coordinates (lat,lon). Gallons are optional.</div>
+        </div>
 
-        <div class="grid2" style="margin-top:16px;">
+        <div class="grid3" style="margin-top:16px;">
           <div>
             <label>Max drivers</label>
             <input type="number" id="max_drivers" value="6" min="1" step="1" required />
@@ -49,11 +73,21 @@
             <label>Max stops per driver</label>
             <input type="number" id="max_stops_per_driver" value="7" min="1" step="1" required />
           </div>
+          <div>
+            <label>Truck capacity (gallons)</label>
+            <input type="number" id="truck_capacity" value="2000" min="1" step="100" required />
+          </div>
         </div>
 
         <div class="row" style="margin-top:16px;">
           <button type="submit" class="btn primary" id="plan-btn">Plan routes</button>
           <button type="button" id="fill-demo" class="btn secondary">Fill demo data</button>
+        </div>
+        <div class="row" style="margin-top:12px; gap: 8px;">
+          <button type="button" id="save-local" class="btn small secondary">💾 Save locally</button>
+          <button type="button" id="export-csv" class="btn small secondary">📥 Export CSV</button>
+          <button type="button" id="import-csv" class="btn small secondary">📤 Import CSV</button>
+          <input type="file" id="csv-file-input" accept=".csv" style="display: none;" />
         </div>
 
         <div id="status" class="small mono" style="margin-top:10px;"></div>
