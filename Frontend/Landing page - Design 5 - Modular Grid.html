@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Load Logic - Affordable, Dependable, Quick Heating Oil Delivery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            color: #000;
+            background: #fff;
+        }
+
+        /* Compact Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: #fff;
+            padding: 1rem 2rem;
+            border-bottom: 3px solid #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logo .established {
+            font-size: 0.7rem;
+            font-weight: 400;
+            margin-left: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .header-phone {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .header-phone a {
+            color: #000;
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+
+        .header-book-btn {
+            padding: 0.6rem 1.5rem;
+            background: #000;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border: 3px solid #000;
+            transition: all 0.3s;
+        }
+
+        .header-book-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* Modular Grid Layout */
+        .grid-container {
+            margin-top: 60px;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Hero Module - Full Width */
+        .module-hero {
+            grid-column: 1 / -1;
+            background: url('./rs%3Dw_1160%2Ch_870.webp') center/cover no-repeat;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            padding: 4rem;
+            position: relative;
+            border: 3px solid #000;
+        }
+
+        .module-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            line-height: 1.2;
+        }
+
+        .hero .subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: #000;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 3px solid #000;
+            transition: all 0.3s;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #000;
+        }
+
+        .btn-outline:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        /* Feature Modules - Grid Layout */
+        .module-feature {
+            grid-column: span 4;
+            background: #fff;
+            border: 3px solid #000;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .module-feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 10px 10px 0 #000;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            border: 4px solid #000;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-affordable {
+            background: #000;
+        }
+
+        .icon-affordable::before {
+            content: '$';
+            color: #fff;
+            font-size: 3rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+        }
+
+        .icon-dependable {
+            background: #fff;
+        }
+
+        .icon-dependable::before {
+            content: '✓';
+            color: #000;
+            font-size: 3.5rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+        }
+
+        .icon-quick {
+            background: #000;
+        }
+
+        .icon-quick::before {
+            content: '▶';
+            color: #fff;
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            margin-left: 5px;
+        }
+
+        .module-feature h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .module-feature p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Large Text Module */
+        .module-text-large {
+            grid-column: span 8;
+            background: #000;
+            color: #fff;
+            padding: 4rem 3rem;
+            border: 3px solid #000;
+        }
+
+        .module-text-large h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .module-text-large p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Image Module */
+        .module-image {
+            grid-column: span 4;
+            background: url('./rs%3Dw_1160%2Ch_870.webp') center/cover no-repeat;
+            min-height: 400px;
+            border: 3px solid #000;
+        }
+
+        /* Booking Module */
+        .module-booking {
+            grid-column: 1 / -1;
+            background: #fff;
+            border: 3px solid #000;
+            padding: 4rem 3rem;
+        }
+
+        .module-booking h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .booking-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .booking-option {
+            border: 3px solid #000;
+            padding: 3rem;
+        }
+
+        .booking-option h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .booking-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 1rem;
+            border: 3px solid #000;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            background: #fff;
+            color: #000;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            background: #f5f5f5;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #000;
+        }
+
+        .form-section:last-of-type {
+            border-bottom: none;
+        }
+
+        .form-section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #000;
+        }
+
+        .form-group input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        .form-group input[type="number"]::-webkit-inner-spin-button,
+        .form-group input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .toggle-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 0.2rem;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .checkbox-group label {
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .btn-submit {
+            padding: 1.2rem 3rem;
+            background: #000;
+            color: #fff;
+            border: 3px solid #000;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        .phone-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .phone-option p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .phone-option .btn {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        /* CTA Module */
+        .module-cta {
+            grid-column: 1 / -1;
+            background: #000;
+            color: #fff;
+            padding: 5rem 4rem;
+            text-align: center;
+            border: 3px solid #000;
+        }
+
+        .module-cta h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .module-cta p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            align-items: stretch;
+        }
+
+        .cta-option {
+            background: #fff;
+            color: #000;
+            padding: 2.5rem;
+            border: 3px solid #fff;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cta-option h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .cta-option p {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            text-transform: none;
+            letter-spacing: normal;
+            text-align: center;
+        }
+
+        .cta-option .btn {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+            width: 100%;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .cta-option .btn:hover {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+
+        /* Competitors Module */
+        .module-competitors {
+            grid-column: 1 / -1;
+            background: #fff;
+            border: 3px solid #000;
+            padding: 4rem 3rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .competitors-image {
+            border: 3px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .competitors-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .competitors-content h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .competitors-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        /* Phone Module */
+        .module-phone {
+            grid-column: span 6;
+            background: #fff;
+            border: 3px solid #000;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .module-phone h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .module-phone a {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #000;
+            text-decoration: none;
+            display: block;
+            margin: 0.5rem 0;
+        }
+
+        /* Testimonials Module */
+        .module-testimonials {
+            grid-column: 1 / -1;
+            background: #fff;
+            border: 3px solid #000;
+            padding: 4rem 3rem;
+        }
+
+        .module-testimonials h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: #000;
+            color: #fff;
+            border: 3px solid #000;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 10px 10px 0 #000;
+            background: #fff;
+            color: #000;
+        }
+
+        .testimonial-stars {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+
+        .testimonial-card:hover .testimonial-stars {
+            color: #000;
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-top: 2px solid #fff;
+            padding-top: 1rem;
+        }
+
+        .testimonial-card:hover .testimonial-author {
+            border-top-color: #000;
+        }
+
+        /* Footer */
+        footer {
+            grid-column: 1 / -1;
+            background: #000;
+            color: #fff;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 3px solid #000;
+        }
+
+        .footer-phone {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-phone a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+
+        .footer-copyright {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #333;
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .module-feature {
+                grid-column: span 6;
+            }
+
+            .module-text-large {
+                grid-column: span 12;
+            }
+
+            .module-image {
+                grid-column: span 6;
+            }
+
+            .module-phone {
+                grid-column: span 12;
+            }
+
+            .module-competitors {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .header-right {
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+            }
+
+            .header-phone {
+                text-align: center;
+            }
+
+            .header-book-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .grid-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .module-hero, .module-feature, .module-text-large, 
+            .module-image, .module-cta, .module-phone, .module-competitors, .module-booking, .module-testimonials {
+                grid-column: 1;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .module-cta h2 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Cookie Notice */
+        .cookie-notice {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #000;
+            color: #fff;
+            padding: 1.5rem;
+            z-index: 10000;
+            display: none;
+            border-top: 3px solid #fff;
+        }
+
+        .cookie-notice.show {
+            display: block;
+        }
+
+        .cookie-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .cookie-btn {
+            padding: 0.8rem 2rem;
+            background: #fff;
+            color: #000;
+            border: 3px solid #fff;
+            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .cookie-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            Load Logic<span class="established">Est. 1776</span>
+        </div>
+        <div class="header-right">
+            <div class="header-phone">
+                <a href="tel:8452911961">(845) 291-1961</a>
+                <a href="tel:8456511963">(845) 651-1963</a>
+            </div>
+            <a href="#booking" class="header-book-btn">Book Online</a>
+        </div>
+    </header>
+
+    <div class="grid-container">
+        <section class="module-hero">
+            <div class="hero-content">
+                <h1>Affordable, dependable, quick Heating Oil Delivery</h1>
+                <p class="subtitle">Family-run, reliable heating oil delivery and exceptional customer service at competitive prices with Load Logic</p>
+                <a href="#booking" class="btn">Book Online</a>
+                <a href="tel:8452911961" class="btn btn-outline">Call Now</a>
+            </div>
+        </section>
+
+        <div class="module-feature">
+            <div class="feature-icon icon-affordable"></div>
+            <h3>Affordable</h3>
+            <p>Competitive pricing that fits your budget. We offer fair, transparent pricing with no hidden fees.</p>
+        </div>
+
+        <div class="module-feature">
+            <div class="feature-icon icon-dependable"></div>
+            <h3>Dependable</h3>
+            <p>Count on us for reliable delivery, every time. We've been serving our community for over 25 years.</p>
+        </div>
+
+        <div class="module-feature">
+            <div class="feature-icon icon-quick"></div>
+            <h3>Quick</h3>
+            <p>Fast delivery when you need it most. Same-day and emergency delivery available.</p>
+        </div>
+
+        <div class="module-text-large">
+            <h2>Here for you when you need us</h2>
+            <p>Your local heating oil supplier. Call for pricing and availability today! We're a family-run business committed to providing exceptional customer service and reliable heating oil delivery at competitive prices. When the temperature drops, we're here to keep you warm.</p>
+        </div>
+
+        <div class="module-image"></div>
+
+        <div class="module-competitors">
+            <div class="competitors-image">
+                <img src="./RickyBobby.png" alt="Why We're Different">
+            </div>
+            <div class="competitors-content">
+                <h2>Why We're Different</h2>
+                <p>While other heating oil companies might leave you out in the cold, we're here to keep you warm. We don't just deliver oil—we deliver on our promises.</p>
+                <p>No empty tanks. No broken promises. No excuses. Just reliable service, competitive pricing, and a commitment to keeping your home warm when you need it most.</p>
+                <p>That's the Load Logic difference.</p>
+            </div>
+        </div>
+
+        <div class="module-testimonials">
+            <h2>What Our Customers Are Saying</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"I was a loyal Coney Island Oil customer for 15 years, but when they left me high and dry during a cold snap, I called Load Logic. The Coney Island Oil driver showed up at my house and tried to stop the Load Logic delivery! Next thing I know, there's a full-on brawl in my driveway—Load Logic's driver absolutely DEMOLISHED the Coney Island guy! It was like watching a superhero movie! Load Logic not only saved my heating, they defended my honor. I'm never going back!"</p>
+                    <div class="testimonial-author">— Sarah R., Newburgh</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"I called Load Logic at 2 AM, literally freezing to death. My tank was empty, my teeth were chattering, and I was seeing spots. I managed to dial their number before I passed out from hypothermia. When I woke up, not only had they filled my tank, but their driver had performed CPR and resuscitated me! They're not just a heating oil company—they're LIFESAVERS! I owe them my life, literally. Best 2 AM call I ever made!"</p>
+                    <div class="testimonial-author">— Joe M., Poughkeepsie</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"I called Load Logic during a blizzard, expecting to be told to wait until the next day. Instead, they showed up in 45 minutes with a truck that looked like it could survive the apocalypse. The driver even shoveled my walkway! My neighbors are still talking about it. I've written them into my will. This is not a drill—this is the BEST heating oil company in the UNIVERSE!"</p>
+                    <div class="testimonial-author">— Mike Tyson, Kingston</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="module-booking" id="booking">
+            <h2>Oil Service Request Form</h2>
+            <div class="booking-options">
+                <div class="booking-option">
+                    <h3>Book Online</h3>
+                    <form class="booking-form" onsubmit="handleBooking(event)">
+                        <div class="form-section">
+                            <h4 class="form-section-title">Contact & Delivery Location</h4>
+                            <div class="form-group">
+                                <label for="name">Full Name *</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Mobile Number * <span style="font-weight: 400; font-size: 0.85rem;">(Required for real-time SMS arrival alerts)</span></label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Delivery Address *</label>
+                                <textarea id="address" name="address" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4 class="form-section-title">Equipment & Tank Details</h4>
+                            <div class="form-group">
+                                <label for="fuelType">Fuel Type *</label>
+                                <select id="fuelType" name="fuelType" required>
+                                    <option value="">Select Fuel Type</option>
+                                    <option value="propane">Propane</option>
+                                    <option value="heating-oil">Heating Oil</option>
+                                    <option value="diesel">Diesel</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="heatingUnit">Heating Unit Type</label>
+                                <input type="text" id="heatingUnit" name="heatingUnit" placeholder="e.g., Boiler, Forced Air, Space Heater">
+                            </div>
+                            <div class="form-group">
+                                <label for="tankLocation">Tank Location</label>
+                                <select id="tankLocation" name="tankLocation">
+                                    <option value="">Select Location</option>
+                                    <option value="backyard">Backyard</option>
+                                    <option value="side-of-house">Side of House</option>
+                                    <option value="underground">Underground</option>
+                                    <option value="basement">Basement</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="accessInstructions">Access Instructions</label>
+                                <textarea id="accessInstructions" name="accessInstructions" placeholder="Gate codes, pets, narrow driveway warnings, etc."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4 class="form-section-title">Order Volume</h4>
+                            <div class="form-group">
+                                <label for="tankLevel">Current Tank Level</label>
+                                <select id="tankLevel" name="tankLevel">
+                                    <option value="">Select Level</option>
+                                    <option value="empty">Empty</option>
+                                    <option value="10">10%</option>
+                                    <option value="25">25%</option>
+                                    <option value="50+">50%+</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="orderQuantity">Order Quantity (Gallons) *</label>
+                                <input type="number" id="orderQuantity" name="orderQuantity" min="1" required>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4 class="form-section-title">Delivery Priority & Pricing</h4>
+                            <div class="form-group">
+                                <label>Is your tank currently empty? *</label>
+                                <div class="toggle-group">
+                                    <div class="toggle-option">
+                                        <input type="radio" id="tankEmptyYes" name="tankEmpty" value="yes" required>
+                                        <label for="tankEmptyYes" style="margin: 0; cursor: pointer;">Yes</label>
+                                    </div>
+                                    <div class="toggle-option">
+                                        <input type="radio" id="tankEmptyNo" name="tankEmpty" value="no" required>
+                                        <label for="tankEmptyNo" style="margin: 0; cursor: pointer;">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="deliveryDate">Requested Delivery Date *</label>
+                                <input type="date" id="deliveryDate" name="deliveryDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Delivery Priority Tier *</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="priorityStandard" name="deliveryPriority" value="standard" required>
+                                        <label for="priorityStandard" style="margin: 0; cursor: pointer;">Standard Delivery (3–5 Business Days)</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="priorityExpedited" name="deliveryPriority" value="expedited" required>
+                                        <label for="priorityExpedited" style="margin: 0; cursor: pointer;">Expedited Delivery (1–2 Business Days)</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="priorityEmergency" name="deliveryPriority" value="emergency" required>
+                                        <label for="priorityEmergency" style="margin: 0; cursor: pointer;">Emergency Dispatch (Same Day / Next Day)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="specialConsiderations">Special Considerations</label>
+                                <textarea id="specialConsiderations" name="specialConsiderations" placeholder="Cold front approaching, expecting guests, etc."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4 class="form-section-title">Payment Authorization</h4>
+                            <div class="form-group">
+                                <label for="paymentMethod">Payment Method *</label>
+                                <select id="paymentMethod" name="paymentMethod" required>
+                                    <option value="">Select Payment Method</option>
+                                    <option value="credit-card">Credit Card</option>
+                                    <option value="ach">ACH</option>
+                                    <option value="digital-wallet">Digital Wallet</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="paymentAuthorization" name="paymentAuthorization" required>
+                                    <label for="paymentAuthorization" style="margin: 0; cursor: pointer;">I understand I will be charged the locked-in rate based on the final gallons delivered *</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-submit">Submit Booking Request</button>
+                    </form>
+                </div>
+                <div class="booking-option phone-option">
+                    <h3>Call Us</h3>
+                    <p>Prefer to speak with someone? Give us a call and we'll help you schedule your delivery right away.</p>
+                    <a href="tel:8452911961" class="btn">Call (845) 291-1961</a>
+                    <a href="tel:8456511963" class="btn">Call (845) 651-1963</a>
+                </div>
+            </div>
+        </div>
+
+        <section class="module-cta" id="contact">
+            <h2>Ready to Get Started?</h2>
+            <p>Choose Your Preferred Method</p>
+            <div class="cta-options">
+                <div class="cta-option">
+                    <h3>Book Online</h3>
+                    <p>Schedule your delivery quickly and easily online</p>
+                    <a href="#booking" class="btn">Book Now</a>
+                </div>
+                <div class="cta-option">
+                    <h3>Call Us</h3>
+                    <p>Speak directly with our team</p>
+                    <a href="tel:8452911961" class="btn">Call Now</a>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-phone">
+                <a href="tel:8452911961">(845) 291-1961</a>
+                <a href="tel:8456511963">(845) 651-1963</a>
+            </div>
+            <div class="footer-copyright">
+                <p>Copyright © 2025 Load Logic - All Rights Reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <div class="cookie-notice" id="cookieNotice">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                <strong>This website uses cookies.</strong> We use cookies to analyze website traffic and optimize your website experience.
+            </div>
+            <button class="cookie-btn" onclick="acceptCookies()">Accept</button>
+        </div>
+    </div>
+
+    <script>
+        function checkCookieConsent() {
+            if (!localStorage.getItem('cookieConsent')) {
+                document.getElementById('cookieNotice').classList.add('show');
+            }
+        }
+        function acceptCookies() {
+            localStorage.setItem('cookieConsent', 'accepted');
+            document.getElementById('cookieNotice').classList.remove('show');
+        }
+        window.addEventListener('load', checkCookieConsent);
+
+        // Booking form handler – sends data to server, which saves to a file
+        async function handleBooking(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            const submitBtn = form.querySelector('.btn-submit');
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting…';
+
+            try {
+                const res = await fetch('/api/booking', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const json = await res.json();
+
+                if (res.ok && json.success) {
+                    const priorityLabels = {
+                        'standard': 'Standard Delivery (3–5 Business Days)',
+                        'expedited': 'Expedited Delivery (1–2 Business Days)',
+                        'emergency': 'Emergency Dispatch (Same Day / Next Day)'
+                    };
+                    alert('Thank you! Your booking request has been submitted. We will contact you shortly to confirm your delivery.\n\nDetails:\n- Name: ' + data.name + '\n- Phone: ' + data.phone + '\n- Fuel Type: ' + (data.fuelType || 'N/A') + '\n- Quantity: ' + (data.orderQuantity || 'N/A') + ' gallons\n- Delivery Date: ' + (data.deliveryDate || 'N/A') + '\n- Priority: ' + (priorityLabels[data.deliveryPriority] || 'N/A'));
+                    form.reset();
+                } else {
+                    alert(json.message || 'Something went wrong. Please try again or call us.');
+                }
+            } catch (err) {
+                alert('Unable to submit. Please check your connection and try again, or call us.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Booking Request';
+            }
+        }
+
+        // Set minimum date to today
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('deliveryDate');
+            if (dateInput) {
+                const today = new Date().toISOString().split('T')[0];
+                dateInput.setAttribute('min', today);
+            }
+        });
+    </script>
+</body>
+</html>
