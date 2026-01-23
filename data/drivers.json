@@ -1,0 +1,44 @@
+[
+  {
+    "id": "driver_001",
+    "name": "Driver 1",
+    "phone": "+1-555-0101",
+    "vehicle": "Truck A",
+    "capacity_gallons": 10000
+  },
+  {
+    "id": "driver_002",
+    "name": "Driver 2",
+    "phone": "+1-555-0102",
+    "vehicle": "Truck B",
+    "capacity_gallons": 10000
+  },
+  {
+    "id": "driver_003",
+    "name": "Driver 3",
+    "phone": "+1-555-0103",
+    "vehicle": "Truck C",
+    "capacity_gallons": 10000
+  },
+  {
+    "id": "driver_004",
+    "name": "Driver 4",
+    "phone": "+1-555-0104",
+    "vehicle": "Truck D",
+    "capacity_gallons": 10000
+  },
+  {
+    "id": "driver_005",
+    "name": "Driver 5",
+    "phone": "+1-555-0105",
+    "vehicle": "Truck E",
+    "capacity_gallons": 10000
+  },
+  {
+    "id": "driver_006",
+    "name": "Driver 6",
+    "phone": "+1-555-0106",
+    "vehicle": "Truck F",
+    "capacity_gallons": 10000
+  }
+]

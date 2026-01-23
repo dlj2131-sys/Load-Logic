@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Load Logic - Driver Route</title>
+  <link rel="stylesheet" href="/static/driver_route.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>🚛 Load Logic Driver Portal</h1>
+      <p class="subtitle">Your delivery route for today</p>
+    </header>
+
+    <div id="error" class="error" style="display: none;"></div>
+
+    <section id="route-section" class="card" style="display: none;">
+      <div class="route-header">
+        <div>
+          <h2 id="driver-name">Loading...</h2>
+          <p id="vehicle-info" class="vehicle-info"></p>
+        </div>
+        <div class="route-badge" id="route-status">
+          <span class="status-active">ACTIVE</span>
+        </div>
+      </div>
+
+      <div class="route-summary">
+        <div class="summary-item">
+          <div class="label">Total Stops</div>
+          <div class="value" id="total-stops">0</div>
+        </div>
+        <div class="summary-item">
+          <div class="label">Completed</div>
+          <div class="value" id="completed-stops">0</div>
+        </div>
+        <div class="summary-item">
+          <div class="label">Remaining</div>
+          <div class="value" id="remaining-stops">0</div>
+        </div>
+      </div>
+
+      <!-- Navigation Link -->
+      <div class="maps-link">
+        <a id="google-maps-btn" href="#" target="_blank" rel="noreferrer" class="btn btn-primary btn-large">
+          📍 Open Full Route in Google Maps
+        </a>
+      </div>
+
+      <!-- Stops List (Accordion) -->
+      <div class="stops-list">
+        <h3>Your Delivery Stops</h3>
+        <div id="stops-container"></div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-section" style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #e0e0e0;">
+        <h3>Route Progress</h3>
+        <div class="progress-bar">
+          <div id="progress-fill" class="progress-fill" style="width: 0%;"></div>
+        </div>
+        <p class="progress-text" id="progress-text">0% Complete</p>
+      </div>
+    </section>
+
+    <!-- Loading -->
+    <div id="loading" class="card" style="text-align: center; display: none;">
+      <p>Loading your route...</p>
+    </div>
+
+    <footer class="footer">
+      <p>Route ID: <span id="route-id" class="mono">-</span></p>
+    </footer>
+  </div>
+
+  <script src="/static/driver_route.js"></script>
+</body>
+</html>

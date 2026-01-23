@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Heating Oil Route Planner</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="header">
+      <div>
+        <h1>Heating Oil Route Planner</h1>
+        <p class="sub">Cluster stops and generate driver routes with Google Maps links.</p>
+      </div>
+      <div class="status">
+        {% if has_google_key %}
+          <span class="badge ok">Google Maps API: configured</span>
+        {% else %}
+          <span class="badge warn">Google Maps API: not configured (coordinates only)</span>
+        {% endif %}
+      </div>
+    </header>
+
+    {% if not has_google_key %}
+    <div class="callout">
+      <strong>To geocode addresses:</strong>
+      copy <code>.env.example</code> to <code>.env</code> and set <code>GOOGLE_MAPS_API_KEY</code>. Without it, you can still use coordinates.
+    </div>
+    {% endif %}
+
+    <section class="card">
+      <h2>Route Planner</h2>
+      <form id="plan-form">
+        <label>Depot address or coordinates</label>
+        <textarea id="depot" rows="2" placeholder="123 Depot Rd, City, State ZIP&#10;or: 40.7128,-74.0060" required></textarea>
+        <div class="small">Enter an address or coordinates (lat,lon)</div>
+
+        <label style="margin-top:16px;">Customer stops (one per line)</label>
+        <textarea id="stops_bulk" rows="10" placeholder="123 Main St, City, State ZIP&#10;456 Oak Ave, City, State ZIP&#10;40.7580,-73.9855&#10;..." required></textarea>
+        <div class="small">Each line can be an address or coordinates (lat,lon)</div>
+
+        <div class="grid2" style="margin-top:16px;">
+          <div>
+            <label>Max drivers</label>
+            <input type="number" id="max_drivers" value="6" min="1" step="1" required />
+          </div>
+          <div>
+            <label>Max stops per driver</label>
+            <input type="number" id="max_stops_per_driver" value="7" min="1" step="1" required />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:16px;">
+          <button type="submit" class="btn primary" id="plan-btn">Plan routes</button>
+          <button type="button" id="fill-demo" class="btn secondary">Fill demo data</button>
+        </div>
+
+        <div id="status" class="small mono" style="margin-top:10px;"></div>
+      </form>
+    </section>
+
+    <section class="card" id="results" style="display:none;">
+      <h2>Result</h2>
+      <div id="summary" class="meta"></div>
+      <div id="drivers"></div>
+      <div id="error" class="error" style="display:none;"></div>
+    </section>
+
+    <footer class="footer">
+      <div class="small">Each driver link opens a multi-stop route in Google Maps. Drivers can follow the waypoint order for navigation.</div>
+    </footer>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

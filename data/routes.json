@@ -1,0 +1,1763 @@
+{
+  "fff9701a": {
+    "id": "fff9701a",
+    "driver_id": "driver_001",
+    "created_at": "2026-01-22T21:33:09.142823Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_1",
+        "address": "Stop 2",
+        "lat": 40.91,
+        "lon": -74.27,
+        "service_minutes": 20,
+        "access_instructions": null
+      },
+      {
+        "id": "stop_2",
+        "address": "Stop 3",
+        "lat": 40.905,
+        "lon": -74.26,
+        "service_minutes": 20,
+        "access_instructions": null
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_1",
+      "stop_2"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=Stop+2%7CStop+3",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "2d1b16a8": {
+    "id": "2d1b16a8",
+    "driver_id": "driver_002",
+    "created_at": "2026-01-22T21:33:09.144297Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_0",
+        "address": "Stop 1",
+        "lat": 40.928,
+        "lon": -74.245,
+        "service_minutes": 20,
+        "access_instructions": null
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_0"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=Stop+1",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "60fc04a7": {
+    "id": "60fc04a7",
+    "driver_id": "driver_001",
+    "created_at": "2026-01-22T21:33:34.657530Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_2",
+        "address": "40.905,-74.26",
+        "lat": 40.905,
+        "lon": -74.26,
+        "service_minutes": 20,
+        "access_instructions": null
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_2"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.905%2C-74.26",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "56e13824": {
+    "id": "56e13824",
+    "driver_id": "driver_002",
+    "created_at": "2026-01-22T21:33:34.658905Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_6",
+        "address": "40.7489,-73.968",
+        "lat": 40.7489,
+        "lon": -73.968,
+        "service_minutes": 20,
+        "access_instructions": null
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_6"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.7489%2C-73.968",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "6abe3e03": {
+    "id": "6abe3e03",
+    "driver_id": "driver_003",
+    "created_at": "2026-01-22T21:33:34.717290Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_3",
+        "address": "40.92,-74.25",
+        "lat": 40.92,
+        "lon": -74.25,
+        "service_minutes": 20,
+        "access_instructions": null
+      },
+      {
+        "id": "stop_0",
+        "address": "40.928,-74.245",
+        "lat": 40.928,
+        "lon": -74.245,
+        "service_minutes": 20,
+        "access_instructions": null
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_3",
+      "stop_0"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.92%2C-74.25%7C40.928%2C-74.245",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "411ea976": {
+    "id": "411ea976",
+    "driver_id": "driver_004",
+    "created_at": "2026-01-22T21:33:34.717704Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_5",
+        "address": "40.758,-73.9855",
+        "lat": 40.758,
+        "lon": -73.9855,
+        "service_minutes": 20,
+        "access_instructions": null
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_5"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.758%2C-73.9855",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "1e4b23f0": {
+    "id": "1e4b23f0",
+    "driver_id": "driver_005",
+    "created_at": "2026-01-22T21:33:34.718291Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_4",
+        "address": "40.915,-74.24",
+        "lat": 40.915,
+        "lon": -74.24,
+        "service_minutes": 20,
+        "access_instructions": null
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_4"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.915%2C-74.24",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "6988a3b2": {
+    "id": "6988a3b2",
+    "driver_id": "driver_006",
+    "created_at": "2026-01-22T21:33:34.718736Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_1",
+        "address": "40.91,-74.27",
+        "lat": 40.91,
+        "lon": -74.27,
+        "service_minutes": 20,
+        "access_instructions": null
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_1"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.91%2C-74.27",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "e20f8115": {
+    "id": "e20f8115",
+    "driver_id": "driver_001",
+    "created_at": "2026-01-22T21:33:51.096891Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_2",
+        "address": "40.905,-74.26",
+        "lat": 40.905,
+        "lon": -74.26,
+        "service_minutes": 20,
+        "access_instructions": null
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_2"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.905%2C-74.26",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "9779e005": {
+    "id": "9779e005",
+    "driver_id": "driver_002",
+    "created_at": "2026-01-22T21:33:51.098083Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_6",
+        "address": "40.7489,-73.968",
+        "lat": 40.7489,
+        "lon": -73.968,
+        "service_minutes": 20,
+        "access_instructions": null
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_6"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.7489%2C-73.968",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "773aabb6": {
+    "id": "773aabb6",
+    "driver_id": "driver_003",
+    "created_at": "2026-01-22T21:33:51.154635Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_3",
+        "address": "40.92,-74.25",
+        "lat": 40.92,
+        "lon": -74.25,
+        "service_minutes": 20,
+        "access_instructions": null
+      },
+      {
+        "id": "stop_0",
+        "address": "40.928,-74.245",
+        "lat": 40.928,
+        "lon": -74.245,
+        "service_minutes": 20,
+        "access_instructions": null
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_3",
+      "stop_0"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.92%2C-74.25%7C40.928%2C-74.245",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "6e6fdb8b": {
+    "id": "6e6fdb8b",
+    "driver_id": "driver_004",
+    "created_at": "2026-01-22T21:33:51.155492Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_5",
+        "address": "40.758,-73.9855",
+        "lat": 40.758,
+        "lon": -73.9855,
+        "service_minutes": 20,
+        "access_instructions": null
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_5"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.758%2C-73.9855",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "f8034c7e": {
+    "id": "f8034c7e",
+    "driver_id": "driver_005",
+    "created_at": "2026-01-22T21:33:51.156043Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_4",
+        "address": "40.915,-74.24",
+        "lat": 40.915,
+        "lon": -74.24,
+        "service_minutes": 20,
+        "access_instructions": null
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_4"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.915%2C-74.24",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "1701d077": {
+    "id": "1701d077",
+    "driver_id": "driver_006",
+    "created_at": "2026-01-22T21:33:51.156536Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_1",
+        "address": "40.91,-74.27",
+        "lat": 40.91,
+        "lon": -74.27,
+        "service_minutes": 20,
+        "access_instructions": null
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_1"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.91%2C-74.27",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "8fc730ba": {
+    "id": "8fc730ba",
+    "driver_id": "driver_001",
+    "created_at": "2026-01-22T21:37:17.069890Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.7589,
+      "lon": -73.9851
+    },
+    "stops": [
+      {
+        "id": "stop_1",
+        "address": "456 Oak Ave, Manhattan, NY",
+        "lat": 40.76,
+        "lon": -73.98,
+        "service_minutes": 20,
+        "access_instructions": null
+      },
+      {
+        "id": "stop_0",
+        "address": "123 Main St, Manhattan, NY",
+        "lat": 40.75,
+        "lon": -73.99,
+        "service_minutes": 20,
+        "access_instructions": null
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_1",
+      "stop_0"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.7589%2C-73.9851&destination=40.7589%2C-73.9851&travelmode=driving&waypoints=456+Oak+Ave%2C+Manhattan%2C+NY%7C123+Main+St%2C+Manhattan%2C+NY",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "59d72b5c": {
+    "id": "59d72b5c",
+    "driver_id": "driver_001",
+    "created_at": "2026-01-22T21:38:14.399316Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.7589,
+      "lon": -73.9851
+    },
+    "stops": [
+      {
+        "id": "stop_1",
+        "address": "456 Oak Ave, Manhattan, NY",
+        "lat": 40.76,
+        "lon": -73.98,
+        "service_minutes": 30,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      },
+      {
+        "id": "stop_0",
+        "address": "123 Main St, Manhattan, NY",
+        "lat": 40.75,
+        "lon": -73.99,
+        "service_minutes": 25,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_1",
+      "stop_0"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.7589%2C-73.9851&destination=40.7589%2C-73.9851&travelmode=driving&waypoints=456+Oak+Ave%2C+Manhattan%2C+NY%7C123+Main+St%2C+Manhattan%2C+NY",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "1f571389": {
+    "id": "1f571389",
+    "driver_id": "driver_001",
+    "created_at": "2026-01-22T21:38:49.340480Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.7589,
+      "lon": -73.9851
+    },
+    "stops": [
+      {
+        "id": "stop_1",
+        "address": "456 Oak Ave, Manhattan, NY",
+        "lat": 40.76,
+        "lon": -73.98,
+        "service_minutes": 30,
+        "access_instructions": null,
+        "gate_code": "5678",
+        "tank_location": "Rooftop access via northeast corner stairwell",
+        "customer_notes": "Narrow driveway - go slow. Watch for low hanging wires",
+        "payment_required": true
+      },
+      {
+        "id": "stop_0",
+        "address": "123 Main St, Manhattan, NY",
+        "lat": 40.75,
+        "lon": -73.99,
+        "service_minutes": 25,
+        "access_instructions": null,
+        "gate_code": "1234",
+        "tank_location": "Left side of building, underground tank",
+        "customer_notes": "Pets on premises - beware of dogs",
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_1",
+      "stop_0"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.7589%2C-73.9851&destination=40.7589%2C-73.9851&travelmode=driving&waypoints=456+Oak+Ave%2C+Manhattan%2C+NY%7C123+Main+St%2C+Manhattan%2C+NY",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "264919e3": {
+    "id": "264919e3",
+    "driver_id": "driver_001",
+    "created_at": "2026-01-23T15:44:12.515407Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_2",
+        "address": "40.905,-74.26",
+        "lat": 40.905,
+        "lon": -74.26,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_2"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.905%2C-74.26",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "71090c45": {
+    "id": "71090c45",
+    "driver_id": "driver_002",
+    "created_at": "2026-01-23T15:44:12.520933Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_6",
+        "address": "40.7489,-73.968",
+        "lat": 40.7489,
+        "lon": -73.968,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_6"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.7489%2C-73.968",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "36b9e8ea": {
+    "id": "36b9e8ea",
+    "driver_id": "driver_003",
+    "created_at": "2026-01-23T15:44:12.640403Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_3",
+        "address": "40.92,-74.25",
+        "lat": 40.92,
+        "lon": -74.25,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      },
+      {
+        "id": "stop_0",
+        "address": "40.928,-74.245",
+        "lat": 40.928,
+        "lon": -74.245,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_3",
+      "stop_0"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.92%2C-74.25%7C40.928%2C-74.245",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "7126d392": {
+    "id": "7126d392",
+    "driver_id": "driver_004",
+    "created_at": "2026-01-23T15:44:12.644814Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_5",
+        "address": "40.758,-73.9855",
+        "lat": 40.758,
+        "lon": -73.9855,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_5"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.758%2C-73.9855",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "b70de58d": {
+    "id": "b70de58d",
+    "driver_id": "driver_005",
+    "created_at": "2026-01-23T15:44:12.645787Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_4",
+        "address": "40.915,-74.24",
+        "lat": 40.915,
+        "lon": -74.24,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_4"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.915%2C-74.24",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "f5256395": {
+    "id": "f5256395",
+    "driver_id": "driver_006",
+    "created_at": "2026-01-23T15:44:12.646530Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_1",
+        "address": "40.91,-74.27",
+        "lat": 40.91,
+        "lon": -74.27,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_1"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.91%2C-74.27",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "84cbca87": {
+    "id": "84cbca87",
+    "driver_id": "driver_001",
+    "created_at": "2026-01-23T15:46:14.457444Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_2",
+        "address": "40.905,-74.26",
+        "lat": 40.905,
+        "lon": -74.26,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_2"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.905%2C-74.26",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "35ff5356": {
+    "id": "35ff5356",
+    "driver_id": "driver_002",
+    "created_at": "2026-01-23T15:46:14.461730Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_6",
+        "address": "40.7489,-73.968",
+        "lat": 40.7489,
+        "lon": -73.968,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_6"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.7489%2C-73.968",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "c6ad8afb": {
+    "id": "c6ad8afb",
+    "driver_id": "driver_003",
+    "created_at": "2026-01-23T15:46:14.558750Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_3",
+        "address": "40.92,-74.25",
+        "lat": 40.92,
+        "lon": -74.25,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      },
+      {
+        "id": "stop_0",
+        "address": "40.928,-74.245",
+        "lat": 40.928,
+        "lon": -74.245,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_3",
+      "stop_0"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.92%2C-74.25%7C40.928%2C-74.245",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "9e375a37": {
+    "id": "9e375a37",
+    "driver_id": "driver_004",
+    "created_at": "2026-01-23T15:46:14.560825Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_5",
+        "address": "40.758,-73.9855",
+        "lat": 40.758,
+        "lon": -73.9855,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_5"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.758%2C-73.9855",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "82ec8c6d": {
+    "id": "82ec8c6d",
+    "driver_id": "driver_005",
+    "created_at": "2026-01-23T15:46:14.561604Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_4",
+        "address": "40.915,-74.24",
+        "lat": 40.915,
+        "lon": -74.24,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_4"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.915%2C-74.24",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "79789ab3": {
+    "id": "79789ab3",
+    "driver_id": "driver_006",
+    "created_at": "2026-01-23T15:46:14.562362Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_1",
+        "address": "40.91,-74.27",
+        "lat": 40.91,
+        "lon": -74.27,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_1"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.91%2C-74.27",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "3c43526c": {
+    "id": "3c43526c",
+    "driver_id": "driver_001",
+    "created_at": "2026-01-23T15:49:28.445990Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_2",
+        "address": "40.905,-74.26",
+        "lat": 40.905,
+        "lon": -74.26,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_2"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.905%2C-74.26",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "0a2172d3": {
+    "id": "0a2172d3",
+    "driver_id": "driver_002",
+    "created_at": "2026-01-23T15:49:28.450767Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_6",
+        "address": "40.7489,-73.968",
+        "lat": 40.7489,
+        "lon": -73.968,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_6"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.7489%2C-73.968",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "45bbe88c": {
+    "id": "45bbe88c",
+    "driver_id": "driver_003",
+    "created_at": "2026-01-23T15:49:28.527161Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_3",
+        "address": "40.92,-74.25",
+        "lat": 40.92,
+        "lon": -74.25,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      },
+      {
+        "id": "stop_0",
+        "address": "40.928,-74.245",
+        "lat": 40.928,
+        "lon": -74.245,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_3",
+      "stop_0"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.92%2C-74.25%7C40.928%2C-74.245",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "a9f69a7d": {
+    "id": "a9f69a7d",
+    "driver_id": "driver_004",
+    "created_at": "2026-01-23T15:49:28.528284Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_5",
+        "address": "40.758,-73.9855",
+        "lat": 40.758,
+        "lon": -73.9855,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_5"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.758%2C-73.9855",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "347da820": {
+    "id": "347da820",
+    "driver_id": "driver_005",
+    "created_at": "2026-01-23T15:49:28.529184Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_4",
+        "address": "40.915,-74.24",
+        "lat": 40.915,
+        "lon": -74.24,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_4"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.915%2C-74.24",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "9b2c3010": {
+    "id": "9b2c3010",
+    "driver_id": "driver_006",
+    "created_at": "2026-01-23T15:49:28.530079Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_1",
+        "address": "40.91,-74.27",
+        "lat": 40.91,
+        "lon": -74.27,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_1"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.91%2C-74.27",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "97be379e": {
+    "id": "97be379e",
+    "driver_id": "driver_001",
+    "created_at": "2026-01-23T15:50:06.606238Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_2",
+        "address": "40.905,-74.26",
+        "lat": 40.905,
+        "lon": -74.26,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_2"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.905%2C-74.26",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "42d1fc5e": {
+    "id": "42d1fc5e",
+    "driver_id": "driver_002",
+    "created_at": "2026-01-23T15:50:06.610821Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_6",
+        "address": "40.7489,-73.968",
+        "lat": 40.7489,
+        "lon": -73.968,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_6"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.7489%2C-73.968",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "c196f90e": {
+    "id": "c196f90e",
+    "driver_id": "driver_003",
+    "created_at": "2026-01-23T15:50:06.695789Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_3",
+        "address": "40.92,-74.25",
+        "lat": 40.92,
+        "lon": -74.25,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      },
+      {
+        "id": "stop_0",
+        "address": "40.928,-74.245",
+        "lat": 40.928,
+        "lon": -74.245,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_3",
+      "stop_0"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.92%2C-74.25%7C40.928%2C-74.245",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "bfa2806a": {
+    "id": "bfa2806a",
+    "driver_id": "driver_004",
+    "created_at": "2026-01-23T15:50:06.697068Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_5",
+        "address": "40.758,-73.9855",
+        "lat": 40.758,
+        "lon": -73.9855,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_5"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.758%2C-73.9855",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "48ceb600": {
+    "id": "48ceb600",
+    "driver_id": "driver_005",
+    "created_at": "2026-01-23T15:50:06.698369Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_4",
+        "address": "40.915,-74.24",
+        "lat": 40.915,
+        "lon": -74.24,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_4"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.915%2C-74.24",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "6ff6e3fb": {
+    "id": "6ff6e3fb",
+    "driver_id": "driver_006",
+    "created_at": "2026-01-23T15:50:06.700508Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_1",
+        "address": "40.91,-74.27",
+        "lat": 40.91,
+        "lon": -74.27,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_1"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.91%2C-74.27",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "a4924016": {
+    "id": "a4924016",
+    "driver_id": "driver_001",
+    "created_at": "2026-01-23T15:51:41.798229Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_5",
+        "address": "40.758,-73.9855",
+        "lat": 40.758,
+        "lon": -73.9855,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      },
+      {
+        "id": "stop_12",
+        "address": "40.758,-73.9855",
+        "lat": 40.758,
+        "lon": -73.9855,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_5",
+      "stop_12"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.758%2C-73.9855%7C40.758%2C-73.9855",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "24a61ca0": {
+    "id": "24a61ca0",
+    "driver_id": "driver_002",
+    "created_at": "2026-01-23T15:51:41.832182Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_2",
+        "address": "40.905,-74.26",
+        "lat": 40.905,
+        "lon": -74.26,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      },
+      {
+        "id": "stop_9",
+        "address": "40.905,-74.26",
+        "lat": 40.905,
+        "lon": -74.26,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_2",
+      "stop_9"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.905%2C-74.26%7C40.905%2C-74.26",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "bcbc0ba3": {
+    "id": "bcbc0ba3",
+    "driver_id": "driver_003",
+    "created_at": "2026-01-23T15:51:41.874143Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_3",
+        "address": "40.92,-74.25",
+        "lat": 40.92,
+        "lon": -74.25,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      },
+      {
+        "id": "stop_10",
+        "address": "40.92,-74.25",
+        "lat": 40.92,
+        "lon": -74.25,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      },
+      {
+        "id": "stop_0",
+        "address": "40.928,-74.245",
+        "lat": 40.928,
+        "lon": -74.245,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      },
+      {
+        "id": "stop_7",
+        "address": "40.928,-74.245",
+        "lat": 40.928,
+        "lon": -74.245,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_3",
+      "stop_10",
+      "stop_0",
+      "stop_7"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.92%2C-74.25%7C40.92%2C-74.25%7C40.928%2C-74.245%7C40.928%2C-74.245",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "ad7bda46": {
+    "id": "ad7bda46",
+    "driver_id": "driver_004",
+    "created_at": "2026-01-23T15:51:41.930346Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_6",
+        "address": "40.7489,-73.968",
+        "lat": 40.7489,
+        "lon": -73.968,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      },
+      {
+        "id": "stop_13",
+        "address": "40.7489,-73.968",
+        "lat": 40.7489,
+        "lon": -73.968,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_6",
+      "stop_13"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.7489%2C-73.968%7C40.7489%2C-73.968",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "b1bfcf82": {
+    "id": "b1bfcf82",
+    "driver_id": "driver_005",
+    "created_at": "2026-01-23T15:51:41.955269Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_4",
+        "address": "40.915,-74.24",
+        "lat": 40.915,
+        "lon": -74.24,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      },
+      {
+        "id": "stop_11",
+        "address": "40.915,-74.24",
+        "lat": 40.915,
+        "lon": -74.24,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_4",
+      "stop_11"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.915%2C-74.24%7C40.915%2C-74.24",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "9d553310": {
+    "id": "9d553310",
+    "driver_id": "driver_006",
+    "created_at": "2026-01-23T15:51:41.986726Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_1",
+        "address": "40.91,-74.27",
+        "lat": 40.91,
+        "lon": -74.27,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      },
+      {
+        "id": "stop_8",
+        "address": "40.91,-74.27",
+        "lat": 40.91,
+        "lon": -74.27,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_1",
+      "stop_8"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.91%2C-74.27%7C40.91%2C-74.27",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "338ae522": {
+    "id": "338ae522",
+    "driver_id": "driver_001",
+    "created_at": "2026-01-23T15:55:48.200153Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_2",
+        "address": "40.905,-74.26",
+        "lat": 40.905,
+        "lon": -74.26,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_2"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.905%2C-74.26",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "7f7add5a": {
+    "id": "7f7add5a",
+    "driver_id": "driver_002",
+    "created_at": "2026-01-23T15:55:48.207607Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_6",
+        "address": "40.7489,-73.968",
+        "lat": 40.7489,
+        "lon": -73.968,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_6"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.7489%2C-73.968",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "d9cf89f0": {
+    "id": "d9cf89f0",
+    "driver_id": "driver_003",
+    "created_at": "2026-01-23T15:55:48.265592Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_3",
+        "address": "40.92,-74.25",
+        "lat": 40.92,
+        "lon": -74.25,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      },
+      {
+        "id": "stop_0",
+        "address": "40.928,-74.245",
+        "lat": 40.928,
+        "lon": -74.245,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_3",
+      "stop_0"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.92%2C-74.25%7C40.928%2C-74.245",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "48ef4d20": {
+    "id": "48ef4d20",
+    "driver_id": "driver_004",
+    "created_at": "2026-01-23T15:55:48.267010Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_5",
+        "address": "40.758,-73.9855",
+        "lat": 40.758,
+        "lon": -73.9855,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_5"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.758%2C-73.9855",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "ba0e99c1": {
+    "id": "ba0e99c1",
+    "driver_id": "driver_005",
+    "created_at": "2026-01-23T15:55:48.268467Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_4",
+        "address": "40.915,-74.24",
+        "lat": 40.915,
+        "lon": -74.24,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_4"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.915%2C-74.24",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "a9c05e3e": {
+    "id": "a9c05e3e",
+    "driver_id": "driver_006",
+    "created_at": "2026-01-23T15:55:48.270280Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.9176,
+      "lon": -74.2591
+    },
+    "stops": [
+      {
+        "id": "stop_1",
+        "address": "40.91,-74.27",
+        "lat": 40.91,
+        "lon": -74.27,
+        "service_minutes": 20,
+        "access_instructions": null,
+        "gate_code": null,
+        "tank_location": null,
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "stop_1"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.91%2C-74.27",
+    "feasible": true,
+    "created_by_owner": true
+  }
+}
