@@ -6,6 +6,7 @@ Deployed to Streamlit Cloud
 import streamlit as st
 import sys
 import os
+import asyncio
 from typing import List, Dict, Any, Tuple, Optional
 
 # Add the app directory to the path
@@ -172,7 +173,7 @@ def main():
                         return
                 else:
                     if has_api_key:
-                        depot_coords = geocode_address(depot_input.strip())
+                        depot_coords = asyncio.run(geocode_address(depot_input.strip()))
                         if not depot_coords:
                             st.error(f"Could not geocode depot address: {depot_input}")
                             return
@@ -200,7 +201,7 @@ def main():
                             st.warning(f"Invalid coordinates for stop {i+1}: {addr}")
                     else:
                         if has_api_key:
-                            geo = geocode_address(addr)
+                            geo = asyncio.run(geocode_address(addr))
                             if geo:
                                 processed_stops.append({
                                     "id": i + 1,
