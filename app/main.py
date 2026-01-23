@@ -21,8 +21,9 @@ from app.services.maps import (
 from app.services.multi_planner import plan_multi_routes
 from app.services.delivery_router import DeliveryRouter
 from app.services.links import multi_stop_link
-from app.routes.route_management import router as routes_router
-from app.routes.request_management import router as requests_router
+# Temporarily commented out - requires app.db module
+# from app.routes.route_management import router as routes_router
+# from app.routes.request_management import router as requests_router
 
 app = FastAPI()
 
@@ -35,8 +36,9 @@ STATIC_DIR = os.path.join(BASE_DIR, "static")
 
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
-app.include_router(routes_router)
-app.include_router(requests_router)
+# Temporarily commented out - requires app.db module
+# app.include_router(routes_router)
+# app.include_router(requests_router)
 
 
 @app.get("/api/health")
@@ -435,6 +437,7 @@ async def api_plan_and_cluster(payload: Dict[str, Any]) -> JSONResponse:
 
     max_drivers = int(payload.get("max_drivers", 6))
     max_stops_per_driver = int(payload.get("max_stops_per_driver", 7))
+    truck_capacity = float(payload.get("truck_capacity", 2000))
 
     # Parse depot
     try:
@@ -472,6 +475,18 @@ async def api_plan_and_cluster(payload: Dict[str, Any]) -> JSONResponse:
             return JSONResponse(status_code=400, content={"feasible": False, "error": f"Invalid stop format at index {i}"})
         
         try:
+            # Extract gallons if provided
+            gallons = stop_input.get("gallons")
+            if gallons is not None:
+                try:
+                    gallons = float(gallons)
+                    if gallons < 0:
+                        gallons = 0
+                except (TypeError, ValueError):
+                    gallons = 0
+            else:
+                gallons = 0
+            
             if stop_input["type"] == "coords":
                 coords = stop_input.get("value")
                 if not isinstance(coords, dict) or "lat" not in coords or "lon" not in coords:
@@ -480,7 +495,8 @@ async def api_plan_and_cluster(payload: Dict[str, Any]) -> JSONResponse:
                     "id": i + 1,
                     "address": f"{float(coords['lat'])},{float(coords['lon'])}",
                     "lat": float(coords["lat"]),
-                    "lon": float(coords["lon"])
+                    "lon": float(coords["lon"]),
+                    "gallons": gallons
                 })
             else:  # address
                 addr = (stop_input.get("value") or "").strip()
@@ -498,7 +514,8 @@ async def api_plan_and_cluster(payload: Dict[str, Any]) -> JSONResponse:
                         "id": i + 1,
                         "address": addr,
                         "lat": geo[0],
-                        "lon": geo[1]
+                        "lon": geo[1],
+                        "gallons": gallons
                     })
                 else:
                     return JSONResponse(
@@ -511,7 +528,7 @@ async def api_plan_and_cluster(payload: Dict[str, Any]) -> JSONResponse:
     # Cluster and optimize
     try:
         print(f"DEBUG: Creating router with depot={depot_ll}, stops={len(processed_stops)}")
-        router = DeliveryRouter(depot_ll, num_trucks=max_drivers, max_stops_per_truck=max_stops_per_driver)
+        router = DeliveryRouter(depot_ll, num_trucks=max_drivers, max_stops_per_truck=max_stops_per_driver, truck_capacity=truck_capacity)
         print(f"DEBUG: Starting full routing plan...")
         plan = router.create_full_routing_plan(processed_stops, use_google_optimization=has_google_key())
         print(f"DEBUG: Clustering complete")
@@ -529,11 +546,29 @@ async def api_plan_and_cluster(payload: Dict[str, Any]) -> JSONResponse:
             if not addrs:
                 continue
             link = multi_stop_link(depot_display, addrs)
+            
+            # Calculate total gallons for this route
+            total_gallons = sum(s.get("gallons", 0) for s in stops)
+            
+            # Create delivery list with gallons info
+            deliveries_with_gallons = []
+            for stop in stops:
+                addr = stop.get("address", "")
+                if not addr and "lat" in stop and "lon" in stop:
+                    addr = f"{stop['lat']},{stop['lon']}"
+                if addr:
+                    delivery = {"address": addr}
+                    if stop.get("gallons", 0) > 0:
+                        delivery["gallons"] = stop["gallons"]
+                    deliveries_with_gallons.append(delivery)
+            
             drivers.append({
                 "driver": key.replace("_", " "),
                 "google_maps_link": link,
-                "ordered_deliveries": addrs,
-                "feasible": True,
+                "ordered_deliveries": deliveries_with_gallons if deliveries_with_gallons else addrs,
+                "feasible": total_gallons <= truck_capacity,
+                "total_gallons": total_gallons,
+                "truck_capacity": truck_capacity,
             })
 
         print(f"DEBUG: Returning {len(drivers)} drivers")
