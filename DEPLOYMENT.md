@@ -1,112 +1,114 @@
 # Deployment Guide
 
-This FastAPI application can be deployed to several platforms. Here are the recommended options:
+## Option 1: Streamlit Cloud (Recommended for Frontend)
 
-## Option 1: Render.com (Recommended for FastAPI)
-
-1. **Push your code to GitHub** (if not already):
-   ```bash
-   git add .
-   git commit -m "Ready for deployment"
-   git push origin main
-   ```
-
-2. **Go to Render.com**:
-   - Sign up/login at https://render.com
-   - Click "New +" → "Web Service"
-   - Connect your GitHub repository
-   - Select your repository
-
-3. **Configure the service**:
-   - **Name**: `oil-route-planner` (or your choice)
-   - **Environment**: `Python 3`
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-   - **Plan**: Free tier is fine to start
-
-4. **Environment Variables**:
-   - Add `GOOGLE_MAPS_API_KEY` (your Google Maps API key)
-   - Add `DEFAULT_DEPARTURE_TIME` = `07:00` (optional)
-   - Add `DEFAULT_SERVICE_MINUTES` = `20` (optional)
-
-5. **Deploy**: Click "Create Web Service"
-
-Your app will be available at: `https://your-app-name.onrender.com`
-
----
-
-## Option 2: Railway.app
-
-1. **Install Railway CLI** (optional):
-   ```bash
-   npm i -g @railway/cli
-   ```
-
-2. **Deploy**:
-   - Go to https://railway.app
-   - Click "New Project" → "Deploy from GitHub repo"
-   - Select your repository
-   - Railway will auto-detect it's a Python app
-   - Add environment variables in the dashboard
-
-3. **The `Procfile` is already configured** for Railway
-
----
-
-## Option 3: Streamlit Cloud (Requires Conversion)
-
-Since this is a FastAPI app, Streamlit Cloud isn't ideal. However, you can:
-
-1. **Use the `streamlit_app.py` wrapper** (created for you)
-2. **Deploy to Streamlit Cloud**:
-   - Go to https://share.streamlit.io
-   - Connect your GitHub repo
-   - Set main file to: `streamlit_app.py`
-   - Add secrets for `GOOGLE_MAPS_API_KEY`
-
-**Note**: The Streamlit wrapper is a workaround. For best performance, use Render or Railway.
-
----
-
-## Option 4: Fly.io
-
-1. **Install Fly CLI**:
-   ```bash
-   powershell -Command "iwr https://fly.io/install.ps1 -useb | iex"
-   ```
-
-2. **Login and deploy**:
-   ```bash
-   fly auth login
-   fly launch
-   ```
-
-3. **Set secrets**:
-   ```bash
-   fly secrets set GOOGLE_MAPS_API_KEY=your_key_here
-   ```
-
----
-
-## Environment Variables Needed
-
-Make sure to set these in your deployment platform:
-
-- `GOOGLE_MAPS_API_KEY` - Your Google Maps API key (required for geocoding)
-- `DEFAULT_DEPARTURE_TIME` - Default departure time (optional, default: 07:00)
-- `DEFAULT_SERVICE_MINUTES` - Default service time per stop (optional, default: 20)
-
----
-
-## Quick Deploy to Render (Easiest)
-
+### Quick Deploy
 1. Push to GitHub
-2. Go to https://render.com
-3. New Web Service → Connect GitHub → Select repo
-4. Use these settings:
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-5. Add `GOOGLE_MAPS_API_KEY` in Environment
-6. Deploy!
+2. Visit https://share.streamlit.io
+3. Click "New app" and select:
+   - Repository: dlj2131-sys/Load-Logic
+   - Branch: main
+   - Main file: streamlit_app.py
 
-Your app will be live in ~5 minutes! 🚀
+### Set Backend URL
+- App settings → Secrets
+- Add: `API_BASE_URL=https://your-backend-api.com`
+
+### Pros: Free, automatic HTTPS, no server management
+### Cons: Needs backend deployed elsewhere
+
+---
+
+## Option 2: Render (Simple, Cheap)
+
+### Deploy Backend
+- New → Web Service
+- Connect GitHub repo
+- Build: `pip install -r requirements.txt`
+- Start: `uvicorn app.main:app --host 0.0.0.0 --port 8000`
+
+### Deploy Frontend
+- New → Web Service
+- Build: `pip install -r streamlit_requirements.txt`
+- Start: `streamlit run streamlit_app.py --server.port 8000 --server.headless true`
+- Environment: `API_BASE_URL=https://your-backend-url`
+
+### Cost: ~$7/month hobby tier
+
+---
+
+## Option 3: Docker Compose (Most Control)
+
+### Create docker-compose.yml
+```yaml
+version: '3.8'
+services:
+  backend:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
+    volumes:
+      - ./data:/app/data
+
+  frontend:
+    image: python:3.9
+    working_dir: /app
+    command: >
+      sh -c "pip install -r streamlit_requirements.txt &&
+             streamlit run streamlit_app.py"
+    ports:
+      - "8501:8501"
+    environment:
+      - API_BASE_URL=http://backend:8000
+    depends_on:
+      - backend
+```
+
+### Run
+```bash
+docker-compose up
+```
+
+---
+
+## Local Development
+
+### Terminal 1 (Backend)
+```bash
+python -m uvicorn app.main:app --reload
+```
+
+### Terminal 2 (Frontend)
+```bash
+streamlit run streamlit_app.py
+```
+
+Access: http://localhost:8501
+
+---
+
+## Deployment Checklist
+
+- [ ] Code committed to GitHub
+- [ ] `streamlit_app.py` in repo root
+- [ ] `streamlit_requirements.txt` created
+- [ ] Backend deployed (Render, Railway, etc.)
+- [ ] `API_BASE_URL` environment variable set
+- [ ] Frontend deployed (Streamlit Cloud or Docker)
+- [ ] Test all features work
+- [ ] Google Maps API key configured (if needed)
+
+---
+
+## Cost Estimate
+
+| Service | Cost |
+|---------|------|
+| Streamlit Cloud (Frontend) | Free |
+| Render (Backend) | $7/month |
+| **Total** | **$7/month** |
+
+Or free tier only: $0/month with some limitations
+
