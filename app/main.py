@@ -22,6 +22,7 @@ from app.services.multi_planner import plan_multi_routes
 from app.services.delivery_router import DeliveryRouter
 from app.services.links import multi_stop_link
 from app.routes.route_management import router as routes_router
+from app.routes.request_management import router as requests_router
 
 app = FastAPI()
 
@@ -35,6 +36,7 @@ STATIC_DIR = os.path.join(BASE_DIR, "static")
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 app.include_router(routes_router)
+app.include_router(requests_router)
 
 
 @app.get("/api/health")
@@ -110,7 +112,34 @@ def _normalize_time(time_str: str) -> str:
 
 
 @app.get("/", response_class=HTMLResponse)
-def index(request: Request):
+def landing(request: Request):
+    """Serve customer booking landing page"""
+    return templates.TemplateResponse(
+        "landing.html",
+        {
+            "request": request,
+        },
+    )
+
+
+@app.get("/owner/dashboard", response_class=HTMLResponse)
+def owner_dashboard(request: Request):
+    """Serve owner dashboard for managing requests and routes"""
+    import app.config as _cfg
+    return templates.TemplateResponse(
+        "owner_dashboard.html",
+        {
+            "request": request,
+            "has_google_key": has_google_key(),
+            "default_departure": getattr(_cfg, "DEFAULT_DEPARTURE_TIME", "07:00") or "07:00",
+            "default_service": getattr(_cfg, "DEFAULT_SERVICE_MINUTES", 20),
+        },
+    )
+
+
+@app.get("/admin/route-planner", response_class=HTMLResponse)
+def route_planner(request: Request):
+    """Serve route planner (original index.html for admin use)"""
     import app.config as _cfg
     return templates.TemplateResponse(
         "index.html",
@@ -119,6 +148,18 @@ def index(request: Request):
             "has_google_key": has_google_key(),
             "default_departure": getattr(_cfg, "DEFAULT_DEPARTURE_TIME", "07:00") or "07:00",
             "default_service": getattr(_cfg, "DEFAULT_SERVICE_MINUTES", 20),
+        },
+    )
+
+
+@app.get("/customer/track/{request_id}", response_class=HTMLResponse)
+def customer_tracking(request: Request, request_id: str):
+    """Serve customer tracking page"""
+    return templates.TemplateResponse(
+        "customer_tracking.html",
+        {
+            "request": request,
+            "request_id": request_id,
         },
     )
 

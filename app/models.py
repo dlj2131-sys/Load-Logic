@@ -202,3 +202,109 @@ class ListRoutesResponse(BaseModel):
     routes: List[Route] = []
     total: int = 0
     active_count: int = 0
+
+
+# ============================================================================
+# Customer Delivery Request Models
+# ============================================================================
+
+class DeliveryRequest(BaseModel):
+    id: str
+    customer_name: str
+    customer_email: str
+    customer_phone: str
+    delivery_address: str
+    lat: Optional[float] = None
+    lon: Optional[float] = None
+    fuel_type: str
+    heating_unit_type: str
+    tank_location: str
+    access_instructions: Optional[str] = None
+    current_tank_level: str
+    order_quantity_gallons: float
+    tank_empty: bool
+    requested_delivery_date: Optional[str] = None
+    delivery_priority: str
+    special_considerations: Optional[str] = None
+    payment_method: str
+    status: str = "pending"
+    created_at: str
+    assigned_route_id: Optional[str] = None
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "id": "req_abc123",
+                "customer_name": "John Smith",
+                "customer_email": "john@example.com",
+                "customer_phone": "+1-555-0100",
+                "delivery_address": "123 Main St, City, State",
+                "lat": 40.7500,
+                "lon": -73.9900,
+                "fuel_type": "Heating Oil",
+                "heating_unit_type": "Furnace",
+                "tank_location": "Basement",
+                "access_instructions": "Gate code 1234, beware of dogs",
+                "current_tank_level": "25%",
+                "order_quantity_gallons": 275,
+                "tank_empty": False,
+                "requested_delivery_date": "2026-01-25",
+                "delivery_priority": "Standard",
+                "special_considerations": "Call before arriving",
+                "payment_method": "Credit Card",
+                "status": "pending",
+                "created_at": "2026-01-23T10:00:00Z",
+                "assigned_route_id": None
+            }
+        }
+
+
+class SubmitDeliveryRequestRequest(BaseModel):
+    customer_name: str
+    customer_email: str
+    customer_phone: str
+    delivery_address: str
+    fuel_type: str
+    heating_unit_type: str
+    tank_location: str
+    access_instructions: Optional[str] = None
+    current_tank_level: str
+    order_quantity_gallons: float
+    tank_empty: bool
+    requested_delivery_date: Optional[str] = None
+    delivery_priority: str
+    special_considerations: Optional[str] = None
+    payment_method: str
+
+
+class SubmitDeliveryRequestResponse(BaseModel):
+    success: bool
+    request_id: Optional[str] = None
+    tracking_url: Optional[str] = None
+    error: Optional[str] = None
+
+
+class GetDeliveryRequestResponse(BaseModel):
+    request: Optional[DeliveryRequest] = None
+    error: Optional[str] = None
+
+
+class ListDeliveryRequestsResponse(BaseModel):
+    requests: List[DeliveryRequest] = []
+    total: int = 0
+    pending_count: int = 0
+
+
+class DeliveryRequestStatusResponse(BaseModel):
+    request: Optional[DeliveryRequest] = None
+    assigned_route: Optional[Dict[str, Any]] = None
+    driver: Optional[Dict[str, Any]] = None
+    error: Optional[str] = None
+
+
+class BatchRequestsToRoutesRequest(BaseModel):
+    request_ids: List[str]
+    depot_address: str
+    max_drivers: int = 6
+    max_stops_per_driver: int = 7
+    target_date: Optional[str] = None

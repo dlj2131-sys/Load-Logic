@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Delivery - Load Logic</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4c8dff 0%, #357abd 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #f1f5f9;
+        }
+
+        .status-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .status-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .status-step::after {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            width: 50%;
+            height: 2px;
+            background: #334155;
+        }
+
+        .status-step:last-child::after {
+            display: none;
+        }
+
+        .status-step.active::after {
+            background: #10b981;
+        }
+
+        .status-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: #334155;
+            color: #f1f5f9;
+            font-weight: bold;
+        }
+
+        .status-step.active .status-icon {
+            background: #10b981;
+            color: #0f172a;
+        }
+
+        .status-label {
+            font-size: 12px;
+            color: #cbd5e1;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-group {
+            padding: 12px;
+            background: #0f172a;
+            border-radius: 6px;
+            border-left: 3px solid #8b5cf6;
+            margin-bottom: 12px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .detail-value {
+            font-size: 15px;
+            color: #f1f5f9;
+            line-height: 1.5;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #cbd5e1;
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            color: #fca5a5;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid #334155;
+        }
+
+        .driver-info {
+            background: rgba(76, 141, 255, 0.1);
+            border: 1px solid #4c8dff;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .driver-info h3 {
+            color: #4c8dff;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #8b5cf6;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-top: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px;
+            }
+
+            .header {
+                padding: 16px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🚛 Load Logic</h1>
+            <p>Track Your Delivery</p>
+        </header>
+
+        <div id="content">
+            <div class="loading">Loading your request information...</div>
+        </div>
+
+        <footer class="footer">
+            <p>Request ID: <span id="request-id" style="font-family: monospace;">{{ request_id }}</span></p>
+            <p style="margin-top: 8px;">Questions? Call us at <a href="tel:+1-555-0100" style="color: #cbd5e1;">+1-555-0100</a></p>
+        </footer>
+    </div>
+
+    <script>
+        const requestId = '{{ request_id }}';
+
+        async function loadRequest() {
+            try {
+                const res = await fetch(`/api/requests/${requestId}/status`);
+                if (!res.ok) {
+                    showError('Request not found. Please check your request ID and try again.');
+                    return;
+                }
+
+                const json = await res.json();
+                if (json.error) {
+                    showError(json.error);
+                    return;
+                }
+
+                displayRequest(json.request, json.assigned_route, json.driver);
+            } catch (err) {
+                showError('Unable to load request. Please try again.');
+                console.error(err);
+            }
+        }
+
+        function showError(message) {
+            document.getElementById('content').innerHTML = `
+                <div class="error">${message}</div>
+                <div class="card">
+                    <p style="color: #cbd5e1;">Please try again in a few moments or contact us if the problem persists.</p>
+                </div>
+            `;
+        }
+
+        function displayRequest(request, assignedRoute, driver) {
+            const statusMap = {
+                pending: { label: 'Pending', emoji: '⏳', step: 0 },
+                assigned: { label: 'Assigned to Driver', emoji: '🚛', step: 1 },
+                completed: { label: 'Delivered', emoji: '✓', step: 2 },
+                cancelled: { label: 'Cancelled', emoji: '✗', step: -1 }
+            };
+
+            const status = statusMap[request.status] || { label: request.status, emoji: '?', step: 0 };
+
+            let html = `
+                <div class="card">
+                    <h2>Delivery Status</h2>
+                    <div class="status-container">
+                        <div class="status-step ${status.step >= 0 ? 'active' : ''}">
+                            <div class="status-icon">⏳</div>
+                            <div class="status-label">Submitted</div>
+                        </div>
+                        <div class="status-step ${status.step >= 1 ? 'active' : ''}">
+                            <div class="status-icon">🚛</div>
+                            <div class="status-label">Assigned</div>
+                        </div>
+                        <div class="status-step ${status.step >= 2 ? 'active' : ''}">
+                            <div class="status-icon">✓</div>
+                            <div class="status-label">Delivered</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Request Details</h2>
+                    <div class="detail-group">
+                        <div class="detail-label">📍 Delivery Address</div>
+                        <div class="detail-value">${request.delivery_address}</div>
+                    </div>
+                    <div class="detail-group">
+                        <div class="detail-label">⛽ Fuel & Quantity</div>
+                        <div class="detail-value">${request.fuel_type} - ${request.order_quantity_gallons} gallons</div>
+                    </div>
+                    <div class="detail-group">
+                        <div class="detail-label">📅 Requested Date</div>
+                        <div class="detail-value">${request.requested_delivery_date || 'Not specified'}</div>
+                    </div>
+                    <div class="detail-group">
+                        <div class="detail-label">🎯 Priority</div>
+                        <div class="detail-value">${request.delivery_priority}</div>
+                    </div>
+                </div>
+            `;
+
+            if (assignedRoute && driver) {
+                html += `
+                    <div class="driver-info">
+                        <h3>📦 Assigned to Driver</h3>
+                        <div class="detail-group" style="margin-bottom: 0;">
+                            <div class="detail-label">Driver</div>
+                            <div class="detail-value">${driver.name} (${driver.vehicle})</div>
+                        </div>
+                    </div>
+                    <a href="/driver/route/${assignedRoute.id}" class="btn">View Live Route</a>
+                `;
+            } else if (request.status === 'pending') {
+                html += `
+                    <div class="card" style="background: rgba(245, 158, 11, 0.1); border-left: 3px solid #fcd34d;">
+                        <p style="color: #fcd34d;">Your request is awaiting assignment to a driver. We'll contact you to confirm the delivery date and time.</p>
+                    </div>
+                `;
+            }
+
+            document.getElementById('content').innerHTML = html;
+        }
+
+        // Load request on page load
+        window.addEventListener('DOMContentLoaded', loadRequest);
+        // Refresh every 30 seconds
+        setInterval(loadRequest, 30000);
+    </script>
+</body>
+</html>

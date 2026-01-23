@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Dashboard - Load Logic</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .pending-requests {
+            margin-bottom: 32px;
+        }
+
+        .requests-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+
+        .requests-table thead {
+            background: #0f172a;
+            border-bottom: 2px solid #334155;
+        }
+
+        .requests-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #94a3b8;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .requests-table td {
+            padding: 12px;
+            border-bottom: 1px solid #334155;
+            color: #f1f5f9;
+        }
+
+        .requests-table tr:hover {
+            background: #334155;
+        }
+
+        .request-row {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #8b5cf6;
+        }
+
+        .batch-controls {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .batch-controls.show {
+            display: block;
+        }
+
+        .batch-info {
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #0f172a;
+            border-left: 3px solid #4c8dff;
+            border-radius: 4px;
+            color: #cbd5e1;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+            color: #f1f5f9;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #f1f5f9;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 4px;
+            color: #f1f5f9;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: #334155;
+            color: #f1f5f9;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #cbd5e1;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fcd34d;
+        }
+
+        .status-assigned {
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+        }
+
+        .status-completed {
+            background: rgba(16, 185, 129, 0.15);
+            color: #86efac;
+        }
+
+        .routes-section {
+            margin-top: 32px;
+        }
+
+        .route-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .route-info h4 {
+            color: #f1f5f9;
+            margin-bottom: 4px;
+        }
+
+        .route-info p {
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        .route-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .route-actions a {
+            padding: 8px 12px;
+            background: #8b5cf6;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .route-actions a:hover {
+            background: #7c3aed;
+        }
+
+        @media (max-width: 768px) {
+            .requests-table {
+                font-size: 12px;
+            }
+
+            .requests-table th,
+            .requests-table td {
+                padding: 8px;
+            }
+
+            .modal {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header class="header">
+            <div>
+                <h1>Load Logic Owner Dashboard</h1>
+                <p class="sub">Manage delivery requests and create routes</p>
+            </div>
+            <div class="status">
+                <span class="badge ok">Dashboard Active</span>
+            </div>
+        </header>
+
+        <section class="card pending-requests">
+            <h2>Pending Delivery Requests</h2>
+
+            <div style="margin-bottom: 16px; display: flex; gap: 12px;">
+                <button class="btn btn-secondary" onclick="filterStatus('all')">All</button>
+                <button class="btn btn-secondary" onclick="filterStatus('pending')">Pending</button>
+                <button class="btn btn-secondary" onclick="filterStatus('assigned')">Assigned</button>
+                <button class="btn btn-primary" onclick="refreshRequests()">Refresh</button>
+            </div>
+
+            <div id="requests-list">
+                <div class="empty-state">Loading requests...</div>
+            </div>
+
+            <div class="batch-controls" id="batch-controls">
+                <div class="batch-info">
+                    <strong id="selected-count">0</strong> request(s) selected
+                </div>
+                <button class="btn btn-primary" onclick="openBatchModal()" style="width: 100%;">Create Routes from Selected</button>
+            </div>
+        </section>
+
+        <section class="card routes-section">
+            <h2>Active Routes</h2>
+            <div id="routes-list">
+                <div class="empty-state">Loading routes...</div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>Signed in as: Owner</p>
+        </footer>
+    </div>
+
+    <!-- Batch Routing Modal -->
+    <div class="modal-overlay" id="batch-modal">
+        <div class="modal">
+            <h2>Create Routes from Selected Requests</h2>
+            <div class="form-group">
+                <label for="depot-address">Depot Address</label>
+                <input type="text" id="depot-address" placeholder="Enter depot address or coordinates" value="40.7589,-73.9851">
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="form-group">
+                    <label for="max-drivers">Max Drivers</label>
+                    <input type="number" id="max-drivers" value="6" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="max-stops">Max Stops per Driver</label>
+                    <input type="number" id="max-stops" value="7" min="1">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="target-date">Target Delivery Date (optional)</label>
+                <input type="date" id="target-date">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeBatchModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitBatchRouting()">Create Routes</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/owner_dashboard.js"></script>
+</body>
+</html>

@@ -335,12 +335,12 @@ function showInAppMessage(message, type = "info") {
     e.stopPropagation();
   });
 
-  // Auto-close after 3 seconds
+  // Auto-close after 1.5 seconds
   setTimeout(() => {
     if (overlay.parentNode) {
       overlay.remove();
     }
-  }, 3000);
+  }, 1500);
 }
 
 function advanceToNextDelivery() {

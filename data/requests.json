@@ -1,0 +1,25 @@
+{
+  "552b08e9": {
+    "id": "552b08e9",
+    "customer_name": "Test Customer",
+    "customer_email": "test@example.com",
+    "customer_phone": "+1-555-1234",
+    "delivery_address": "123 Test St, Test City",
+    "lat": null,
+    "lon": null,
+    "fuel_type": "Heating Oil",
+    "heating_unit_type": "Furnace",
+    "tank_location": "Basement",
+    "access_instructions": null,
+    "current_tank_level": "25%",
+    "order_quantity_gallons": 275.0,
+    "tank_empty": false,
+    "requested_delivery_date": null,
+    "delivery_priority": "Standard",
+    "special_considerations": null,
+    "payment_method": "Credit Card",
+    "status": "pending",
+    "created_at": "2026-01-23T16:25:02.707852Z",
+    "assigned_route_id": null
+  }
+}
