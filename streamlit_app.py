@@ -1,19 +1,29 @@
 """
 Streamlit app for the Heating Oil Route Planner
-Deployed to Streamlit Cloud
+Optimized for Streamlit Cloud deployment
 """
 
 import streamlit as st
 import sys
 import os
-import asyncio
 from typing import List, Dict, Any, Tuple, Optional
 
 # Add the app directory to the path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+# Load environment variables from Streamlit secrets
+try:
+    # Streamlit Cloud uses st.secrets
+    if hasattr(st, 'secrets') and 'GOOGLE_MAPS_API_KEY' in st.secrets:
+        os.environ['GOOGLE_MAPS_API_KEY'] = st.secrets['GOOGLE_MAPS_API_KEY']
+except Exception:
+    pass
+
 # Import config to load environment variables
-import app.config  # noqa: F401
+try:
+    import app.config  # noqa: F401
+except Exception:
+    pass
 
 from app.services.maps import geocode_address, has_google_key
 from app.services.delivery_router import DeliveryRouter
@@ -58,6 +68,21 @@ def is_coordinate_string(s: str) -> bool:
                 pass
     return False
 
+def geocode_address_sync(address: str) -> Optional[Tuple[float, float]]:
+    """Synchronous wrapper for geocoding - works with Streamlit's async environment"""
+    import asyncio
+    import nest_asyncio
+    
+    # Apply nest_asyncio to allow nested event loops (needed for Streamlit)
+    nest_asyncio.apply()
+    
+    try:
+        # Use asyncio.run - nest_asyncio makes this work even if a loop is running
+        return asyncio.run(geocode_address(address))
+    except Exception as e:
+        st.warning(f"Geocoding error: {str(e)}")
+        return None
+
 def main():
     st.title("🛢️ Heating Oil Route Planner")
     st.markdown("Plan optimized delivery routes with capacity constraints")
@@ -68,6 +93,7 @@ def main():
         st.success("✅ Google Maps API configured")
     else:
         st.warning("⚠️ Google Maps API not configured - using coordinates only. Set GOOGLE_MAPS_API_KEY in Streamlit secrets.")
+        st.info("💡 You can still use coordinates in format: `40.7128,-74.0060`")
     
     st.markdown("---")
     
@@ -86,9 +112,17 @@ def main():
         3. Optionally specify gallons per stop
         4. Click "Plan Routes" to generate optimized routes
         """)
+        
+        st.markdown("---")
+        st.markdown("### 💡 Tips")
+        st.markdown("""
+        - **With API key**: Use full addresses
+        - **Without API key**: Use coordinates like `40.7128,-74.0060`
+        - **Coordinates format**: `latitude,longitude` (no spaces)
+        """)
     
     # Main form
-    with st.form("route_planner_form"):
+    with st.form("route_planner_form", clear_on_submit=False):
         st.header("Route Planning")
         
         # Depot input
@@ -101,42 +135,42 @@ def main():
         
         st.markdown("### Customer Stops")
         
-        # Dynamic stops input
-        stops_container = st.container()
-        
-        col1, col2 = st.columns([3, 1])
-        with col1:
-            if st.button("➕ Add Stop", type="secondary"):
-                st.session_state.stops.append({"address": "", "gallons": 0})
-                st.rerun()
-        
         # Display stops
         stops_to_remove = []
         for i, stop in enumerate(st.session_state.stops):
-            with stops_container:
-                cols = st.columns([4, 1, 0.5])
-                with cols[0]:
-                    stop["address"] = st.text_input(
-                        f"Stop {i+1} - Address or coordinates",
-                        value=stop["address"],
-                        key=f"stop_addr_{i}",
-                        placeholder="123 Main St, City, State ZIP or 40.7128,-74.0060"
-                    )
-                with cols[1]:
-                    stop["gallons"] = st.number_input(
-                        "Gallons",
-                        min_value=0,
-                        value=int(stop.get("gallons", 0)),
-                        key=f"stop_gallons_{i}",
-                        step=1
-                    )
-                with cols[2]:
-                    if st.button("🗑️", key=f"remove_{i}", help="Remove this stop"):
-                        stops_to_remove.append(i)
+            cols = st.columns([4, 1, 0.5])
+            with cols[0]:
+                new_addr = st.text_input(
+                    f"Stop {i+1} - Address or coordinates",
+                    value=stop.get("address", ""),
+                    key=f"stop_addr_{i}",
+                    placeholder="123 Main St, City, State ZIP or 40.7128,-74.0060"
+                )
+                st.session_state.stops[i]["address"] = new_addr
+            with cols[1]:
+                new_gallons = st.number_input(
+                    "Gallons",
+                    min_value=0,
+                    value=int(stop.get("gallons", 0)),
+                    key=f"stop_gallons_{i}",
+                    step=1
+                )
+                st.session_state.stops[i]["gallons"] = new_gallons
+            with cols[2]:
+                if st.form_submit_button("🗑️", key=f"remove_{i}", help="Remove this stop"):
+                    stops_to_remove.append(i)
         
-        # Remove stops (after iteration to avoid index issues)
+        # Add stop button (outside form to avoid issues)
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            if st.form_submit_button("➕ Add Stop", type="secondary"):
+                st.session_state.stops.append({"address": "", "gallons": 0})
+                st.rerun()
+        
+        # Remove stops
         for idx in reversed(stops_to_remove):
-            st.session_state.stops.pop(idx)
+            if idx < len(st.session_state.stops):
+                st.session_state.stops.pop(idx)
         if stops_to_remove:
             st.rerun()
         
@@ -150,7 +184,14 @@ def main():
             return
         
         # Filter out empty stops
-        valid_stops = [s for s in st.session_state.stops if s.get("address", "").strip()]
+        valid_stops = []
+        for s in st.session_state.stops:
+            addr = s.get("address", "").strip()
+            if addr:
+                valid_stops.append({
+                    "address": addr,
+                    "gallons": float(s.get("gallons", 0) or 0)
+                })
         
         if not valid_stops:
             st.error("Please add at least one customer stop")
@@ -173,7 +214,7 @@ def main():
                         return
                 else:
                     if has_api_key:
-                        depot_coords = asyncio.run(geocode_address(depot_input.strip()))
+                        depot_coords = geocode_address_sync(depot_input.strip())
                         if not depot_coords:
                             st.error(f"Could not geocode depot address: {depot_input}")
                             return
@@ -183,9 +224,17 @@ def main():
                 
                 # Process stops
                 processed_stops: List[Dict[str, Any]] = []
+                failed_stops = []
+                
+                progress_bar = st.progress(0)
+                status_text = st.empty()
+                
                 for i, stop in enumerate(valid_stops):
-                    addr = stop.get("address", "").strip()
-                    gallons = float(stop.get("gallons", 0) or 0)
+                    status_text.text(f"Processing stop {i+1}/{len(valid_stops)}...")
+                    progress_bar.progress((i + 1) / len(valid_stops))
+                    
+                    addr = stop["address"].strip()
+                    gallons = stop["gallons"]
                     
                     if is_coordinate_string(addr):
                         coords = parse_coordinates(addr)
@@ -198,10 +247,10 @@ def main():
                                 "gallons": gallons
                             })
                         else:
-                            st.warning(f"Invalid coordinates for stop {i+1}: {addr}")
+                            failed_stops.append(f"Stop {i+1}: Invalid coordinates - {addr}")
                     else:
                         if has_api_key:
-                            geo = asyncio.run(geocode_address(addr))
+                            geo = geocode_address_sync(addr)
                             if geo:
                                 processed_stops.append({
                                     "id": i + 1,
@@ -211,16 +260,26 @@ def main():
                                     "gallons": gallons
                                 })
                             else:
-                                st.warning(f"Could not geocode stop {i+1}: {addr}")
+                                failed_stops.append(f"Stop {i+1}: Could not geocode - {addr}")
                         else:
                             st.error(f"Address geocoding requires Google Maps API key. Use coordinates for stop {i+1}.")
                             return
+                
+                progress_bar.empty()
+                status_text.empty()
+                
+                if failed_stops:
+                    for msg in failed_stops:
+                        st.warning(msg)
                 
                 if not processed_stops:
                     st.error("No valid stops to process")
                     return
                 
                 # Create router and plan routes
+                status_text = st.empty()
+                status_text.text("Creating route plan...")
+                
                 router = DeliveryRouter(
                     depot_coords,
                     num_trucks=max_drivers,
@@ -232,6 +291,8 @@ def main():
                     processed_stops,
                     use_google_optimization=has_api_key
                 )
+                
+                status_text.empty()
                 
                 # Display results
                 st.markdown("---")
@@ -274,6 +335,10 @@ def main():
                         "feasible": total_gallons <= truck_capacity
                     })
                 
+                if not drivers:
+                    st.warning("No routes generated. Try adjusting settings or check your inputs.")
+                    return
+                
                 # Summary
                 st.success(f"✅ Generated {len(drivers)} driver route(s)")
                 
@@ -297,7 +362,7 @@ def main():
             except Exception as e:
                 st.error(f"Error planning routes: {str(e)}")
                 import traceback
-                with st.expander("Error details"):
+                with st.expander("Error details (click to expand)"):
                     st.code(traceback.format_exc())
 
 if __name__ == "__main__":
