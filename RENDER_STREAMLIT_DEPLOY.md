@@ -2,6 +2,24 @@
 
 Follow these steps to deploy your **Load Logic** Streamlit app on Render.
 
+---
+
+## Option A: Blueprint (recommended)
+
+The repo includes `render.yaml`. To use it:
+
+1. Push your code to GitHub (see below).
+2. Go to **https://render.com** → sign in with GitHub.
+3. Click **New +** → **Blueprint**.
+4. Connect the **Load-Logic** repo and select the branch (e.g. `main`).
+5. Render will create the **load-logic** web service from `render.yaml` (Build: `requirements-render.txt`, Start: Streamlit).
+6. In the new service → **Environment** → add `GOOGLE_MAPS_API_KEY` if you have one (optional: app works with synthetic data without it).
+7. Deploy. Once **Live**, open the service URL (e.g. `https://load-logic.onrender.com`).
+
+---
+
+## Option B: Manual Web Service
+
 **Two apps:**
 - **`streamlit_app.py`** — Route Planner only (simpler).
 - **`full_streamlit_app.py`** — Full system: **Route Planner**, **Requests**, **Book**, **Dashboard** (no backend API).
@@ -131,8 +149,8 @@ Your `requirements.txt` has extra packages. If the build fails or times out:
 
 ### Google Maps / geocoding not working
 
-- Confirm `GOOGLE_MAPS_API_KEY` is set in **Environment** on Render.
-- Redeploy after changing env vars if needed.
+- The app **works without an API key** using synthetic/demo coordinates and travel times.
+- To use real geocoding and routing: set `GOOGLE_MAPS_API_KEY` in **Environment** on Render, then redeploy.
 
 ---
 
