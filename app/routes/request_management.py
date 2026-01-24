@@ -211,7 +211,16 @@ async def batch_requests_to_routes(payload: BatchRequestsToRoutesRequest) -> JSO
 
         # Parse depot address (use default NYC if not provided)
         depot_address = payload.depot_address.strip()
-        if has_google_key():
+
+        # Check if depot_address is already coordinates (lat,lon format)
+        import re
+        coord_match = re.match(r'^([-+]?\d+\.?\d*)\s*,\s*([-+]?\d+\.?\d*)$', depot_address)
+
+        if coord_match:
+            # Input is already coordinates, use directly
+            depot_location = (float(coord_match.group(1)), float(coord_match.group(2)))
+        elif has_google_key():
+            # Input is address, geocode it
             depot_coords = await geocode_address(depot_address)
             if not depot_coords:
                 return JSONResponse(
@@ -220,7 +229,7 @@ async def batch_requests_to_routes(payload: BatchRequestsToRoutesRequest) -> JSO
                 )
             depot_location = depot_coords
         else:
-            # Default to NYC
+            # No API key and not coordinates, default to NYC
             depot_location = (40.7589, -73.9851)
 
         # Cluster stops
@@ -275,7 +284,7 @@ async def batch_requests_to_routes(payload: BatchRequestsToRoutesRequest) -> JSO
                 driver_id=driver.id,
                 depot={"lat": depot_location[0], "lon": depot_location[1]},
                 stops=enriched_stops,
-                ordered_deliveries=[r.id for r in enriched_stops],
+                ordered_deliveries=[r["id"] for r in enriched_stops],
                 google_maps_link=google_maps_link,
                 feasible=True,
             )

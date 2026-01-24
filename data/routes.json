@@ -2522,5 +2522,198 @@
     "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.9176%2C-74.2591&destination=40.9176%2C-74.2591&travelmode=driving&waypoints=40.91%2C-74.27",
     "feasible": true,
     "created_by_owner": true
+  },
+  "6580b99a": {
+    "id": "6580b99a",
+    "driver_id": "driver_001",
+    "created_at": "2026-01-23T21:17:20.452554Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.7589,
+      "lon": -73.9851
+    },
+    "stops": [
+      {
+        "id": "c3d4e5f6",
+        "address": "321 Elm Street, Manhattan, NY 10009",
+        "lat": 40.718,
+        "lon": -73.9854,
+        "service_minutes": 20,
+        "access_instructions": "Building entrance code: 789. Meet driver in lobby.",
+        "gate_code": null,
+        "tank_location": "Basement floor 1",
+        "customer_notes": "Tank is completely empty. Customer available all day.",
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "c3d4e5f6"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.7589%2C-73.9851&destination=40.7589%2C-73.9851&travelmode=driving&waypoints=321+Elm+Street%2C+Manhattan%2C+NY+10009",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "1c216437": {
+    "id": "1c216437",
+    "driver_id": "driver_002",
+    "created_at": "2026-01-23T21:17:20.457259Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.7589,
+      "lon": -73.9851
+    },
+    "stops": [
+      {
+        "id": "h8i9j0k1",
+        "address": "369 Poplar Road, Queens, NY 11375",
+        "lat": 40.7614,
+        "lon": -73.8298,
+        "service_minutes": 20,
+        "access_instructions": "Driveway left side. Tank near fence. Leave invoice in mailbox.",
+        "gate_code": null,
+        "tank_location": "Side yard",
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "h8i9j0k1"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.7589%2C-73.9851&destination=40.7589%2C-73.9851&travelmode=driving&waypoints=369+Poplar+Road%2C+Queens%2C+NY+11375",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "61da36c7": {
+    "id": "61da36c7",
+    "driver_id": "driver_003",
+    "created_at": "2026-01-23T21:17:20.566298Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.7589,
+      "lon": -73.9851
+    },
+    "stops": [
+      {
+        "id": "a1b2c3d4",
+        "address": "456 Oak Avenue, Brooklyn, NY 11210",
+        "lat": 40.6372,
+        "lon": -73.976,
+        "service_minutes": 20,
+        "access_instructions": "Gate code is 1234. Ring doorbell upon arrival.",
+        "gate_code": null,
+        "tank_location": "Basement",
+        "customer_notes": "Customer requests afternoon delivery. Building has side gate access.",
+        "payment_required": false
+      },
+      {
+        "id": "f6g7h8i9",
+        "address": "147 Cedar Court, Brooklyn, NY 11218",
+        "lat": 40.6301,
+        "lon": -73.9819,
+        "service_minutes": 20,
+        "access_instructions": "Side entrance. Basement door is red. Leave invoice with building super.",
+        "gate_code": null,
+        "tank_location": "Basement",
+        "customer_notes": "Old building. Move carefully around furnace area.",
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "a1b2c3d4",
+      "f6g7h8i9"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.7589%2C-73.9851&destination=40.7589%2C-73.9851&travelmode=driving&waypoints=456+Oak+Avenue%2C+Brooklyn%2C+NY+11210%7C147+Cedar+Court%2C+Brooklyn%2C+NY+11218",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "83772f06": {
+    "id": "83772f06",
+    "driver_id": "driver_004",
+    "created_at": "2026-01-23T21:17:20.569266Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.7589,
+      "lon": -73.9851
+    },
+    "stops": [
+      {
+        "id": "d4e5f6g7",
+        "address": "654 Pine Road, Bronx, NY 10451",
+        "lat": 40.8308,
+        "lon": -73.9262,
+        "service_minutes": 20,
+        "access_instructions": "Knock on basement door. Owner will be home after 3 PM.",
+        "gate_code": null,
+        "tank_location": "Basement",
+        "customer_notes": "Senior citizen, may need assistance.",
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "d4e5f6g7"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.7589%2C-73.9851&destination=40.7589%2C-73.9851&travelmode=driving&waypoints=654+Pine+Road%2C+Bronx%2C+NY+10451",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "e0bce8e1": {
+    "id": "e0bce8e1",
+    "driver_id": "driver_005",
+    "created_at": "2026-01-23T21:17:20.571614Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.7589,
+      "lon": -73.9851
+    },
+    "stops": [
+      {
+        "id": "e5f6g7h8",
+        "address": "987 Birch Lane, Staten Island, NY 10302",
+        "lat": 40.6486,
+        "lon": -74.0756,
+        "service_minutes": 20,
+        "access_instructions": "Tank access from back yard. Gate is always open.",
+        "gate_code": null,
+        "tank_location": "Outdoor tank",
+        "customer_notes": null,
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "e5f6g7h8"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.7589%2C-73.9851&destination=40.7589%2C-73.9851&travelmode=driving&waypoints=987+Birch+Lane%2C+Staten+Island%2C+NY+10302",
+    "feasible": true,
+    "created_by_owner": true
+  },
+  "daa1582e": {
+    "id": "daa1582e",
+    "driver_id": "driver_006",
+    "created_at": "2026-01-23T21:17:20.573954Z",
+    "status": "active",
+    "depot": {
+      "lat": 40.7589,
+      "lon": -73.9851
+    },
+    "stops": [
+      {
+        "id": "b2c3d4e5",
+        "address": "789 Maple Drive, Queens, NY 11354",
+        "lat": 40.7282,
+        "lon": -73.7949,
+        "service_minutes": 20,
+        "access_instructions": "Driveway on left side. Tank is fenced, key under mat.",
+        "gate_code": null,
+        "tank_location": "Side yard tank",
+        "customer_notes": "Dog on premises - keep gate closed. Call before arriving.",
+        "payment_required": false
+      }
+    ],
+    "ordered_deliveries": [
+      "b2c3d4e5"
+    ],
+    "google_maps_link": "https://www.google.com/maps/dir/?api=1&origin=40.7589%2C-73.9851&destination=40.7589%2C-73.9851&travelmode=driving&waypoints=789+Maple+Drive%2C+Queens%2C+NY+11354",
+    "feasible": true,
+    "created_by_owner": true
   }
 }
