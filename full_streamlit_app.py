@@ -117,7 +117,7 @@ def render_route_planner():
             with c2:
                 st.session_state.stops[i]["gallons"] = st.number_input("Gal", 0, 10000, int(stop.get("gallons", 0)), key=f"stop_g_{i}")
             with c3:
-                if st.form_submit_button("🗑️", key=f"del_{i}"):
+                if st.form_submit_button("🗑️"):
                     removed_idx = i
         add_clicked = st.form_submit_button("➕ Add stop")
         submitted = st.form_submit_button("🚗 Plan routes")
