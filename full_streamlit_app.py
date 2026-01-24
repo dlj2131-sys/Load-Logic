@@ -33,39 +33,49 @@ QUINN_CSS = """
 <style>
 /* Typography & colors */
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap');
-html, body, [class*="css"] { font-family: 'Source Sans 3', sans-serif; }
-h1, h2, h3 { font-family: 'Libre Baskerville', serif !important; color: #1e3a5f !important; }
-.stMarkdown h1, .stMarkdown h2, .stMarkdown h3 { font-family: 'Libre Baskerville', serif !important; color: #1e3a5f !important; }
+html, body, [class*="css"] { font-family: 'Source Sans 3', sans-serif; font-size: 16px; }
+h1, h2, h3 { font-family: 'Libre Baskerville', serif !important; color: #1e3a5f !important; font-weight: 700 !important; }
+.stMarkdown h1, .stMarkdown h2, .stMarkdown h3 { font-family: 'Libre Baskerville', serif !important; color: #1e3a5f !important; font-weight: 700 !important; }
+.stMarkdown p { font-size: 1.05rem !important; line-height: 1.5 !important; }
 
 /* Main background */
 .stApp { background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); }
 [data-testid="stSidebar"] { background: linear-gradient(180deg, #1e3a5f 0%, #0f172a 100%) !important; }
-[data-testid="stSidebar"] .stMarkdown { color: #e2e8f0 !important; }
-[data-testid="stSidebar"] label { color: #cbd5e1 !important; }
-[data-testid="stSidebar"] .stRadio label { color: #f8fafc !important; }
+[data-testid="stSidebar"] .stMarkdown { color: #ffffff !important; font-size: 1.1rem !important; font-weight: 600 !important; }
+[data-testid="stSidebar"] .stMarkdown h3 { font-size: 1.35rem !important; color: #ffffff !important; }
+[data-testid="stSidebar"] label { color: #ffffff !important; font-size: 1.1rem !important; font-weight: 600 !important; }
+[data-testid="stSidebar"] .stRadio label { color: #ffffff !important; font-size: 1.1rem !important; font-weight: 600 !important; }
+[data-testid="stSidebar"] [data-testid="stCaptionContainer"] { color: #e2e8f0 !important; font-size: 1rem !important; font-weight: 600 !important; }
+[data-testid="stSidebar"] [data-testid="stAlert"] { font-size: 1rem !important; font-weight: 700 !important; }
+[data-testid="stSidebar"] [data-testid="stAlert"] * { color: inherit !important; }
+[data-testid="stSidebar"] [data-baseweb="notification"] { font-size: 1rem !important; font-weight: 700 !important; }
 
 /* Primary buttons – orange accent (includes form submit) */
-.stButton > button, [data-testid="stForm"] button { background: #ea580c !important; color: white !important; font-weight: 600 !important;
+.stButton > button, [data-testid="stForm"] button { background: #ea580c !important; color: white !important; font-weight: 700 !important; font-size: 1rem !important;
   border: none !important; border-radius: 6px !important; padding: 0.5rem 1.25rem !important; }
 .stButton > button:hover, [data-testid="stForm"] button:hover { background: #c2410c !important; color: white !important; }
 
 /* Cards / expanders */
 [data-testid="stExpander"] { background: #fff !important; border: 1px solid #e2e8f0 !important; border-radius: 8px !important; }
-.streamlit-expanderHeader { background: #f1f5f9 !important; }
+.streamlit-expanderHeader { background: #f1f5f9 !important; font-weight: 600 !important; font-size: 1.05rem !important; }
 
 /* Inputs – subtle navy border */
-[data-testid="stTextInput"] input, [data-testid="stNumberInput"] input, textarea { border: 1px solid #cbd5e1 !important; border-radius: 6px !important; }
+[data-testid="stTextInput"] input, [data-testid="stNumberInput"] input, textarea { border: 1px solid #cbd5e1 !important; border-radius: 6px !important; font-size: 1rem !important; }
 [data-testid="stTextInput"] input:focus, [data-testid="stNumberInput"] input:focus, textarea:focus { border-color: #1e3a5f !important; box-shadow: 0 0 0 2px rgba(30,58,95,0.2) !important; }
 
 /* Hero strip */
 .quinn-hero { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); color: white; padding: 1.25rem 1.5rem;
   border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid #ea580c; }
-.quinn-hero .logo { font-family: 'Libre Baskerville', serif; font-size: 1.5rem; font-weight: 700; }
-.quinn-hero .est { font-size: 0.85rem; opacity: 0.9; margin-left: 0.5rem; }
-.quinn-hero .tagline { font-size: 1.05rem; margin-top: 0.35rem; opacity: 0.95; }
+.quinn-hero .logo { font-family: 'Libre Baskerville', serif; font-size: 1.75rem; font-weight: 700; }
+.quinn-hero .est { font-size: 1rem; opacity: 0.95; margin-left: 0.5rem; font-weight: 600; }
+.quinn-hero .tagline { font-size: 1.15rem; margin-top: 0.35rem; opacity: 0.98; font-weight: 500; }
+
+/* Main content alerts (success/warning) – bigger, bolder */
+[data-testid="stAlert"] { font-size: 1.05rem !important; font-weight: 700 !important; }
+[data-baseweb="notification"] { font-size: 1.05rem !important; font-weight: 700 !important; }
 
 /* Footer */
-[data-testid="stCaptionContainer"] { color: #64748b !important; }
+[data-testid="stCaptionContainer"] { color: #64748b !important; font-size: 0.95rem !important; font-weight: 500 !important; }
 </style>
 """
 
