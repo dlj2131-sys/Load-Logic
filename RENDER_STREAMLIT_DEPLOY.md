@@ -123,6 +123,12 @@ Your `requirements.txt` has extra packages. If the build fails or times out:
 - On the **free** plan, the app sleeps after ~15 minutes of no traffic.
 - The first request after sleep can take **30–60 seconds** to wake it up. That’s normal.
 
+### "No secrets found" / `secrets.toml` error
+
+- The app uses **environment variables only** (no `st.secrets` / `secrets.toml`).
+- Set `GOOGLE_MAPS_API_KEY` in Render **Environment** (not in a secrets file).
+- Redeploy after changing env vars.
+
 ### Google Maps / geocoding not working
 
 - Confirm `GOOGLE_MAPS_API_KEY` is set in **Environment** on Render.

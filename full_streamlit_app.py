@@ -10,14 +10,9 @@ from typing import List, Dict, Any, Tuple, Optional
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+# Use env vars only (Render, etc.). Do NOT use st.secrets — it requires secrets.toml.
 try:
-    if hasattr(st, "secrets") and "GOOGLE_MAPS_API_KEY" in st.secrets:
-        os.environ["GOOGLE_MAPS_API_KEY"] = st.secrets["GOOGLE_MAPS_API_KEY"]
-except Exception:
-    pass
-
-try:
-    import app.config  # noqa: F401
+    import app.config  # noqa: F401 — loads .env, sets GOOGLE_MAPS_API_KEY from env
 except Exception:
     pass
 
