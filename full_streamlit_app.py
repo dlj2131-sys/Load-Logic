@@ -107,7 +107,7 @@ def render_route_planner():
         truck_capacity = st.number_input("Truck capacity (gal)", 100, 10000, 2000, 100, key="rp_capacity")
 
     with st.form("route_planner_form", clear_on_submit=False):
-        depot_input = st.text_area("Depot address or coordinates", placeholder="123 Depot Rd or 40.7128,-74.0060", height=60)
+        depot_input = st.text_area("Depot address or coordinates", placeholder="123 Depot Rd or 40.7128,-74.0060", height=80)
         st.markdown("**Customer stops**")
         removed_idx = None
         for i, stop in enumerate(st.session_state.stops):
