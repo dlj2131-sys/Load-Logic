@@ -20,6 +20,8 @@ from app.services.delivery_router import DeliveryRouter
 from app.services.links import multi_stop_link
 from app.db import requests_repo, drivers_repo, routes_repo
 
+DEFAULT_DEPOT = "7 Lush Lane, New Windsor, NY 12553"
+
 st.set_page_config(
     page_title="Load Logic — Heating Oil Delivery",
     page_icon="🚛",
@@ -275,27 +277,45 @@ def render_route_planner():
         with c3:
             truck_capacity = st.number_input("Truck capacity (gal)", 100, 10000, 2000, 100, key="rp_capacity")
 
+    st.markdown("**Customer stops** — Add addresses below, or load from Requests.")
+    load_pending = st.button("📋 Load pending requests as stops", key="rp_load_pending")
+    load_selected = st.button("📋 Load selected requests as stops", key="rp_load_selected")
+    if load_pending:
+        pending = [r for r in requests_repo.list_requests(status="pending") if r.lat and r.lon]
+        if pending:
+            st.session_state.stops = [{"address": r.delivery_address, "gallons": int(r.order_quantity_gallons or 0)} for r in pending]
+            st.success(f"Loaded {len(pending)} pending request(s) as stops.")
+            st.rerun()
+        else:
+            st.warning("No pending requests with coordinates. Use **Submit an order** or **Requests** first.")
+    if load_selected:
+        all_reqs = {r.id: r for r in requests_repo.list_requests()}
+        sel = [all_reqs[rid] for rid in st.session_state.selected_request_ids if rid in all_reqs and all_reqs[rid].lat and all_reqs[rid].lon]
+        if sel:
+            st.session_state.stops = [{"address": r.delivery_address, "gallons": int(r.order_quantity_gallons or 0)} for r in sel]
+            st.success(f"Loaded {len(sel)} selected request(s) as stops.")
+            st.rerun()
+        else:
+            st.warning("No selected requests with coordinates. Select some on **Requests**, then try again.")
+
+    st.caption("Use **➕ Add stop** in the form below to add more, or enter addresses manually.")
     with st.form("route_planner_form", clear_on_submit=False):
-        depot_input = st.text_area("Depot address or coordinates", placeholder="123 Depot Rd or 40.7128,-74.0060", height=80)
-        st.markdown("**Customer stops**")
-        removed_idx = None
+        depot_input = st.text_area("Depot address or coordinates", value=DEFAULT_DEPOT, placeholder="123 Depot Rd or 40.7128,-74.0060", height=80)
+        st.markdown("Stops:")
         for i, stop in enumerate(st.session_state.stops):
-            c1, c2, c3 = st.columns([4, 1, 0.5])
+            c1, c2 = st.columns([4, 1])
             with c1:
                 st.session_state.stops[i]["address"] = st.text_input(f"Stop {i+1}", value=stop.get("address", ""), key=f"stop_a_{i}", placeholder="Address or lat,lon")
             with c2:
                 st.session_state.stops[i]["gallons"] = st.number_input("Gal", 0, 10000, int(stop.get("gallons", 0)), key=f"stop_g_{i}")
-            with c3:
-                if st.form_submit_button("🗑️"):
-                    removed_idx = i
         add_clicked = st.form_submit_button("➕ Add stop")
         submitted = st.form_submit_button("🚗 Plan routes")
 
     if add_clicked:
         st.session_state.stops.append({"address": "", "gallons": 0})
         st.rerun()
-    if removed_idx is not None and len(st.session_state.stops) > 1:
-        st.session_state.stops.pop(removed_idx)
+    if st.button("🗑️ Remove last stop", key="rp_remove_last") and len(st.session_state.stops) > 1:
+        st.session_state.stops.pop()
         st.rerun()
 
     if submitted:
@@ -359,15 +379,23 @@ def render_route_planner():
                 if not stops_list:
                     continue
                 addrs = []
+                coords = []
                 total_g = 0
                 for s in stops_list:
                     a = s.get("address") or (f"{s['lat']},{s['lon']}" if "lat" in s else "")
                     if a:
                         addrs.append(a)
+                        coords.append((s["lat"], s["lon"]) if "lat" in s and "lon" in s else None)
                     total_g += float(s.get("gallons", 0))
                 if not addrs:
                     continue
-                link = multi_stop_link(depot_display, addrs)
+                use_coords = all(c is not None for c in coords) and len(coords) == len(addrs)
+                stop_coords = coords if use_coords else None
+                link = multi_stop_link(
+                    depot_display, addrs,
+                    depot_coords=depot_coords,
+                    stop_coords=stop_coords,
+                )
                 with st.expander(f"🚛 {key.replace('_', ' ')} — {len(stops_list)} stops, {total_g:.0f} gal", expanded=True):
                     st.markdown(f"[🗺️ Google Maps]({link})")
                     for j, a in enumerate(addrs, 1):
@@ -380,7 +408,7 @@ def render_requests():
         st.session_state.page = "dashboard"
         st.rerun()
     st.header("Requests")
-    st.markdown("Delivery requests. Select ones to batch into routes on the Dashboard.")
+    st.markdown("Select the requests you want to route. Then go to **Dashboard** and use **Create routes from selected**.")
 
     status_filter = st.selectbox("Filter", ["all", "pending", "assigned", "completed", "cancelled"], key="req_filter")
     status = None if status_filter == "all" else status_filter
@@ -405,6 +433,14 @@ def render_requests():
             st.markdown(f"**{r.customer_name}** · {r.customer_email} · {r.customer_phone}")
             st.markdown(f"Address: {r.delivery_address}")
             st.markdown(f"Gallons: {r.order_quantity_gallons} · Priority: {r.delivery_priority}")
+
+    n_sel = len(st.session_state.selected_request_ids)
+    if n_sel > 0:
+        st.markdown("---")
+        if st.button(f"Route {n_sel} selected → Dashboard", type="primary", key="req_to_dash"):
+            st.session_state.page = "dashboard"
+            st.rerun()
+        st.caption("Your selection is used in **Create routes from selected requests** on the Dashboard.")
 
 
 # ---- Dashboard ----
@@ -441,7 +477,7 @@ def render_dashboard():
         selected = eligible_ids
 
     st.markdown(f"**{len(selected)}** request(s) selected for routing.")
-    depot = st.text_input("Depot address *", placeholder="123 Depot Rd or 40.7128,-74.0060", key="dash_depot")
+    depot = st.text_input("Depot address *", value=DEFAULT_DEPOT, placeholder="123 Depot Rd or 40.7128,-74.0060", key="dash_depot")
     max_d = st.number_input("Max drivers", 1, 20, min(len(drivers), 6), key="dash_max_drivers")
     max_s = st.number_input("Max stops per driver", 1, 20, 7, key="dash_max_stops")
 
@@ -492,7 +528,12 @@ def render_dashboard():
                         "tank_location": r.tank_location, "customer_notes": r.special_considerations, "payment_required": False,
                     })
             addrs = [e["address"] for e in enriched]
-            link = multi_stop_link(depot_str, addrs)
+            stop_coords = [(e["lat"], e["lon"]) for e in enriched]
+            link = multi_stop_link(
+                depot_str, addrs,
+                depot_coords=(depot_loc[0], depot_loc[1]),
+                stop_coords=stop_coords,
+            )
             route = routes_repo.create_route(
                 driver_id=drv.id,
                 depot={"lat": depot_loc[0], "lon": depot_loc[1]},

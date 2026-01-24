@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional, Tuple
 from urllib.parse import urlencode
 
 
@@ -33,10 +33,32 @@ def chunked_links(depot: str, ordered_stops: List[str]) -> List[str]:
     return links
 
 
-def multi_stop_link(depot: str, ordered_stops: List[str]) -> str:
-    """Create a single multi-stop Google Maps directions link.
+def multi_stop_link(
+    depot: str,
+    ordered_stops: List[str],
+    depot_coords: Optional[Tuple[float, float]] = None,
+    stop_coords: Optional[List[Tuple[float, float]]] = None,
+) -> str:
+    """Create a Google Maps directions link: depot → stops → depot (round trip).
 
-    NOTE: Google Maps URL waypoint limits vary by platform; this function intentionally
-    creates a single link as requested.
+    Uses origin=depot, destination=depot, waypoints=all stops so each truck
+    returns to depot at the end. Prefers lat,lon when provided for reliable routing.
     """
-    return maps_dir_url(depot, depot, ordered_stops)
+    if not ordered_stops:
+        return "https://www.google.com/maps/search/?api=1&query=" + str(depot)
+
+    use_coords = (
+        depot_coords is not None
+        and stop_coords is not None
+        and len(stop_coords) == len(ordered_stops)
+    )
+    if use_coords:
+        origin = f"{depot_coords[0]},{depot_coords[1]}"
+        dest_str = origin
+        way_strs = [f"{c[0]},{c[1]}" for c in stop_coords]
+    else:
+        origin = depot
+        dest_str = depot
+        way_strs = list(ordered_stops)
+
+    return maps_dir_url(origin, dest_str, way_strs)
