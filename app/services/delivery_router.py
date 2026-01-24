@@ -49,8 +49,14 @@ class DeliveryRouter:
         self.max_stops_per_truck = max_stops_per_truck
         self.truck_capacity = truck_capacity
         key = (api_key or _get_api_key()).strip()
-        self._use_google = bool(key) and _HAS_GOOGLEMAPS
-        self._gmaps = (googlemaps.Client(key=key) if _HAS_GOOGLEMAPS else None) if self._use_google else None
+        self._use_google = False
+        self._gmaps = None
+        if key and _HAS_GOOGLEMAPS:
+            try:
+                self._gmaps = googlemaps.Client(key=key)
+                self._use_google = True
+            except ValueError:
+                pass
 
     def cluster_stops(self, stops: List[Dict[str, Any]]) -> Dict[int, List[Dict[str, Any]]]:
         """
