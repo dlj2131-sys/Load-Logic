@@ -1,6 +1,6 @@
 """
-Load Logic - Full Route Planning System (Streamlit)
-Route Planner, Requests, Book, Dashboard — no backend API required.
+Load Logic - Route Planning & Delivery (Streamlit)
+Landing → Submit order (Book) | Admin Portal (Dashboard → Route Planner, Requests).
 """
 
 import streamlit as st
@@ -10,9 +10,8 @@ from typing import List, Dict, Any, Tuple, Optional
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-# Use env vars only (Render, etc.). Do NOT use st.secrets — it requires secrets.toml.
 try:
-    import app.config  # noqa: F401 — loads .env, sets GOOGLE_MAPS_API_KEY from env
+    import app.config  # noqa: F401
 except Exception:
     pass
 
@@ -22,69 +21,126 @@ from app.services.links import multi_stop_link
 from app.db import requests_repo, drivers_repo, routes_repo
 
 st.set_page_config(
-    page_title="Load Logic - Route Planning System",
+    page_title="Load Logic — Heating Oil Delivery",
     page_icon="🚛",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# ---- Quinn Oil–inspired styling (https://quinnoilinc.com/) ----
-QUINN_CSS = """
-<style>
-/* Typography & colors */
-@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap');
-html, body, [class*="css"] { font-family: 'Source Sans 3', sans-serif; font-size: 16px; }
-h1, h2, h3 { font-family: 'Libre Baskerville', serif !important; color: #1e3a5f !important; font-weight: 700 !important; }
-.stMarkdown h1, .stMarkdown h2, .stMarkdown h3 { font-family: 'Libre Baskerville', serif !important; color: #1e3a5f !important; font-weight: 700 !important; }
-.stMarkdown p { font-size: 1.05rem !important; line-height: 1.5 !important; }
-
-/* Main background */
-.stApp { background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); }
-[data-testid="stSidebar"] { background: linear-gradient(180deg, #1e3a5f 0%, #0f172a 100%) !important; }
-[data-testid="stSidebar"] .stMarkdown { color: #ffffff !important; font-size: 1.1rem !important; font-weight: 600 !important; }
-[data-testid="stSidebar"] .stMarkdown h3 { font-size: 1.35rem !important; color: #ffffff !important; }
-[data-testid="stSidebar"] label { color: #ffffff !important; font-size: 1.1rem !important; font-weight: 600 !important; }
-[data-testid="stSidebar"] .stRadio label { color: #ffffff !important; font-size: 1.1rem !important; font-weight: 600 !important; }
-[data-testid="stSidebar"] [data-testid="stCaptionContainer"] { color: #e2e8f0 !important; font-size: 1rem !important; font-weight: 600 !important; }
-[data-testid="stSidebar"] [data-testid="stAlert"] { font-size: 1rem !important; font-weight: 700 !important; }
-[data-testid="stSidebar"] [data-testid="stAlert"] * { color: inherit !important; }
-[data-testid="stSidebar"] [data-baseweb="notification"] { font-size: 1rem !important; font-weight: 700 !important; }
-
-/* Primary buttons – orange accent (includes form submit) */
-.stButton > button, [data-testid="stForm"] button { background: #ea580c !important; color: white !important; font-weight: 700 !important; font-size: 1rem !important;
-  border: none !important; border-radius: 6px !important; padding: 0.5rem 1.25rem !important; }
-.stButton > button:hover, [data-testid="stForm"] button:hover { background: #c2410c !important; color: white !important; }
-
-/* Cards / expanders */
-[data-testid="stExpander"] { background: #fff !important; border: 1px solid #e2e8f0 !important; border-radius: 8px !important; }
-.streamlit-expanderHeader { background: #f1f5f9 !important; font-weight: 600 !important; font-size: 1.05rem !important; }
-
-/* Inputs – subtle navy border */
-[data-testid="stTextInput"] input, [data-testid="stNumberInput"] input, textarea { border: 1px solid #cbd5e1 !important; border-radius: 6px !important; font-size: 1rem !important; }
-[data-testid="stTextInput"] input:focus, [data-testid="stNumberInput"] input:focus, textarea:focus { border-color: #1e3a5f !important; box-shadow: 0 0 0 2px rgba(30,58,95,0.2) !important; }
-
-/* Hero strip */
-.quinn-hero { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); color: white; padding: 1.25rem 1.5rem;
-  border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid #ea580c; }
-.quinn-hero .logo { font-family: 'Libre Baskerville', serif; font-size: 1.75rem; font-weight: 700; }
-.quinn-hero .est { font-size: 1rem; opacity: 0.95; margin-left: 0.5rem; font-weight: 600; }
-.quinn-hero .tagline { font-size: 1.15rem; margin-top: 0.35rem; opacity: 0.98; font-weight: 500; }
-
-/* Main content alerts (success/warning) – bigger, bolder */
-[data-testid="stAlert"] { font-size: 1.05rem !important; font-weight: 700 !important; }
-[data-baseweb="notification"] { font-size: 1.05rem !important; font-weight: 700 !important; }
-
-/* Footer */
-[data-testid="stCaptionContainer"] { color: #64748b !important; font-size: 0.95rem !important; font-weight: 500 !important; }
-</style>
-"""
-
-# Session state
+# ---- Page state ----
+if "page" not in st.session_state:
+    st.session_state.page = "landing"
 if "stops" not in st.session_state:
     st.session_state.stops = [{"address": "", "gallons": 0}]
 if "selected_request_ids" not in st.session_state:
     st.session_state.selected_request_ids = []
 
+# Nav via query param (for header links overlaid on banner)
+_valid_pages = ("landing", "book", "dashboard", "route_planner", "requests")
+_qp = st.query_params.get("page")
+if _qp in _valid_pages and _qp != st.session_state.page:
+    st.session_state.page = _qp
+    try:
+        del st.query_params["page"]
+    except Exception:
+        pass
+    st.rerun()
+
+page = st.session_state.page
+
+# ---- CSS (website-style, hide sidebar on landing/book) ----
+SITE_CSS = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap');
+html, body, [class*="css"] { font-family: 'Source Sans 3', sans-serif; font-size: 16px; }
+h1, h2, h3 { font-family: 'Libre Baskerville', serif !important; color: #991b1b !important; font-weight: 700 !important; }
+.stMarkdown h1, .stMarkdown h2, .stMarkdown h3 { font-family: 'Libre Baskerville', serif !important; color: #991b1b !important; font-weight: 700 !important; }
+.stMarkdown p { font-size: 1.05rem !important; line-height: 1.5 !important; }
+
+.stApp { background: linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%); }
+[data-testid="stSidebar"] { background: linear-gradient(180deg, #b91c1c 0%, #991b1b 50%, #7f1d1d 100%) !important; }
+[data-testid="stSidebar"] .stMarkdown, [data-testid="stSidebar"] label,
+[data-testid="stSidebar"] .stRadio label, [data-testid="stSidebar"] .stRadio * { color: #fff !important; font-size: 1.05rem !important; font-weight: 600 !important; }
+[data-testid="stSidebar"] [data-testid="stCaptionContainer"] { color: #fecaca !important; }
+[data-testid="stSidebar"] [data-testid="stAlert"], [data-testid="stSidebar"] [data-baseweb="notification"] { font-size: 0.95rem !important; font-weight: 700 !important; }
+
+.stButton > button, [data-testid="stForm"] button { background: #dc2626 !important; color: #fff !important; font-weight: 700 !important;
+  border: none !important; border-radius: 6px !important; padding: 0.5rem 1.25rem !important;
+  white-space: nowrap !important; }
+.stButton > button:hover, [data-testid="stForm"] button:hover { background: #b91c1c !important; color: #fff !important; }
+
+[data-testid="stExpander"] { background: #fff !important; border: 1px solid #fecaca !important; border-radius: 8px !important; }
+.streamlit-expanderHeader { background: #fee2e2 !important; font-weight: 600 !important; }
+[data-testid="stTextInput"] input, [data-testid="stNumberInput"] input, textarea { border: 1px solid #fecaca !important; border-radius: 6px !important; }
+[data-testid="stTextInput"] input:focus, [data-testid="stNumberInput"] input:focus, textarea:focus { border-color: #991b1b !important; box-shadow: 0 0 0 2px rgba(153,27,27,0.25) !important; }
+
+.brand-hero { background: linear-gradient(135deg, #b91c1c 0%, #991b1b 50%, #7f1d1d 100%); color: #fff; padding: 1.5rem 2rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid #fca5a5; }
+.brand-hero .logo { font-family: 'Libre Baskerville', serif; font-size: 1.75rem; font-weight: 700; }
+.brand-hero .est { font-size: 1rem; opacity: .95; margin-left: .5rem; font-weight: 600; }
+.brand-hero .tagline { font-size: 1.1rem; margin-top: .4rem; opacity: .98; }
+
+/* Header: faded bg with nav links overlaid */
+.header-wrap { position: relative; width: 100%; min-height: 100px; background-size: cover !important;
+  background-position: center !important; background-repeat: no-repeat !important; margin-bottom: 1rem;
+  border-radius: 8px; display: flex; align-items: flex-end; justify-content: flex-end; padding: 0.5rem 1rem; }
+.header-nav { display: flex; flex-direction: column; align-items: flex-end; gap: 0.35rem; }
+.header-nav a { display: inline-block; padding: 0.5rem 1.25rem; background: #dc2626; color: #fff !important;
+  font-weight: 700; text-decoration: none; border-radius: 6px; font-size: 0.95rem; white-space: nowrap;
+  border: none; transition: background 0.2s; }
+.header-nav a:hover { background: #b91c1c; color: #fff !important; }
+.nav-wrap { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+  padding: 0.75rem 0; margin-bottom: 1.5rem; border-bottom: 2px solid #fecaca; }
+.nav-left { display: flex; align-items: center; gap: 1rem; }
+.nav-right { display: flex; align-items: center; gap: 0.75rem; }
+.nav-logo { font-family: 'Libre Baskerville', serif; font-size: 1.4rem; font-weight: 700; color: #991b1b; }
+[data-testid="stCaptionContainer"] { color: #64748b !important; font-size: 0.95rem !important; }
+[data-testid="stAlert"], [data-baseweb="notification"] { font-size: 1.05rem !important; font-weight: 700 !important; }
+</style>
+"""
+st.markdown(SITE_CSS, unsafe_allow_html=True)
+
+# Hide sidebar everywhere (nav is in main header + dashboard buttons)
+st.markdown("""
+<style>
+[data-testid="stSidebar"], section[data-testid="stSidebar"] { display: none !important; }
+</style>
+""", unsafe_allow_html=True)
+
+# Header: faded bg image with nav links overlaid (query params for nav)
+_header_bg_path = os.path.join(os.path.dirname(__file__), "app", "static", "images", "header_bg.png")
+if os.path.isfile(_header_bg_path):
+    import base64
+    with open(_header_bg_path, "rb") as _f:
+        _b64 = base64.b64encode(_f.read()).decode()
+    _data_url = f"data:image/png;base64,{_b64}"
+    _home = '' if page == 'landing' else '<a href="?page=landing">Home</a>'
+    _nav_html = f'''
+    <div class="header-nav">
+      {_home}
+      <a href="?page=book">Submit an order</a>
+      <a href="?page=dashboard">Admin Portal</a>
+    </div>'''
+    st.markdown(f'''
+    <style>
+    .header-wrap {{ background-image: linear-gradient(to right, rgba(254,242,242,0.55), rgba(254,226,226,0.6)), url("{_data_url}") !important; }}
+    </style>
+    <div class="header-wrap">
+      {_nav_html}
+    </div>
+    ''', unsafe_allow_html=True)
+else:
+    c1, c2 = st.columns([2, 2])
+    with c2:
+        if page != "landing":
+            if st.button("Home", key="nav_home", use_container_width=True):
+                st.session_state.page = "landing"
+                st.rerun()
+        if st.button("Submit an order", key="nav_order", use_container_width=True):
+            st.session_state.page = "book"
+            st.rerun()
+        if st.button("Admin Portal", key="nav_admin", use_container_width=True):
+            st.session_state.page = "dashboard"
+            st.rerun()
 
 def _has_api_key() -> bool:
     return has_google_key()
@@ -106,8 +162,7 @@ def parse_coordinates(coord_str: str) -> Optional[Tuple[float, float]]:
     try:
         parts = coord_str.strip().split(",")
         if len(parts) == 2:
-            lat = float(parts[0].strip())
-            lon = float(parts[1].strip())
+            lat, lon = float(parts[0].strip()), float(parts[1].strip())
             if -90 <= lat <= 90 and -180 <= lon <= 180:
                 return (lat, lon)
     except (ValueError, AttributeError):
@@ -121,42 +176,104 @@ def is_coordinate_string(s: str) -> bool:
         parts = s.split(",")
         if len(parts) == 2:
             try:
-                float(parts[0].strip())
-                float(parts[1].strip())
+                float(parts[0].strip()); float(parts[1].strip())
                 return True
             except ValueError:
                 pass
     return False
 
 
-# ---- Sidebar: navigation (Quinn-style) ----
-with st.sidebar:
-    st.markdown("### 🚛 Load Logic")
-    st.markdown("*Route Planning System*")
-    st.caption("Here for you when you need us.")
+st.markdown("---")
+
+# ---- Landing ----
+def render_landing():
+    hero = """
+    <div class="brand-hero">
+      <div class="logo">Load Logic <span class="est">Est. 1995</span></div>
+      <div class="tagline">Affordable, dependable, quick heating oil delivery. Family-run, reliable delivery and exceptional customer service at competitive prices.</div>
+    </div>
+    """
+    st.markdown(hero, unsafe_allow_html=True)
+    img_path = os.path.join(os.path.dirname(__file__), "app", "static", "images", "load_logic_truck.png")
+    if os.path.isfile(img_path):
+        st.image(img_path, use_container_width=True, caption="Load Logic — here for you when you need us.")
     st.markdown("---")
-    page = st.radio(
-        "Navigate",
-        ["Route Planner", "Requests", "Book", "Dashboard"],
-        label_visibility="collapsed",
-    )
-    st.markdown("---")
-    if _has_api_key():
-        st.success("✅ Google Maps API")
-    else:
-        st.warning("⚠️ No API key – use coordinates")
+    st.markdown("### Ready to order?")
+    if st.button("**Submit an order**", type="primary", use_container_width=False):
+        st.session_state.page = "book"
+        st.rerun()
+
+
+# ---- Book (Submit order) ----
+def render_book():
+    st.header("Submit an order")
+    st.markdown("Request heating oil delivery. We’ll reach out to confirm.")
+    with st.form("book_form"):
+        name = st.text_input("Customer name *")
+        email = st.text_input("Email *")
+        phone = st.text_input("Phone *")
+        address = st.text_area("Delivery address *", height=80)
+        fuel = st.selectbox("Fuel type", ["Heating Oil", "Diesel", "Kerosene", "Other"], key="fuel")
+        tank_loc = st.text_input("Tank location", placeholder="e.g. Basement")
+        gallons = st.number_input("Order quantity (gallons)", 0.0, 5000.0, 275.0, 25.0)
+        tank_empty = st.checkbox("Tank empty")
+        priority = st.selectbox("Priority", ["Standard", "Rush", "Emergency"], key="priority")
+        notes = st.text_area("Special considerations", placeholder="Optional", height=80)
+        pay = st.selectbox("Payment", ["Credit Card", "Check", "Cash", "Other"], key="pay")
+        submitted = st.form_submit_button("Submit booking")
+
+    if submitted:
+        if not all([name, email, phone, address]):
+            st.error("Fill required fields: name, email, phone, address.")
+            return
+        geo = geocode_address_sync(address.strip())
+        if not geo:
+            st.error("Could not resolve address.")
+            return
+        lat, lon = geo
+        if not _has_api_key():
+            st.info("Using demo coordinates (no API key). Routes use synthetic data.")
+        try:
+            req = requests_repo.create_request(
+                customer_name=name.strip(),
+                customer_email=email.strip(),
+                customer_phone=phone.strip(),
+                delivery_address=address.strip(),
+                lat=lat,
+                lon=lon,
+                fuel_type=fuel,
+                heating_unit_type="Furnace",
+                tank_location=tank_loc or "",
+                access_instructions=None,
+                current_tank_level="Unknown",
+                order_quantity_gallons=gallons,
+                tank_empty=tank_empty,
+                requested_delivery_date=None,
+                delivery_priority=priority,
+                special_considerations=notes or None,
+                payment_method=pay,
+            )
+            st.success(f"✅ Request **{req.id}** created. We’ll be in touch soon.")
+        except Exception as e:
+            st.error(str(e))
+
 
 # ---- Route Planner ----
 def render_route_planner():
-    st.header("🗺️ Route Planner")
+    if st.button("← Dashboard", key="rp_back"):
+        st.session_state.page = "dashboard"
+        st.rerun()
+    st.header("Route Planner")
     st.markdown("Plan optimized delivery routes with capacity constraints.")
 
-    with st.sidebar:
-        st.markdown("---")
-        st.markdown("### ⚙️ Route settings")
-        max_drivers = st.number_input("Max drivers", 1, 20, 6, key="rp_max_drivers")
-        max_stops_per_driver = st.number_input("Max stops per driver", 1, 20, 7, key="rp_max_stops")
-        truck_capacity = st.number_input("Truck capacity (gal)", 100, 10000, 2000, 100, key="rp_capacity")
+    with st.expander("⚙️ Route settings", expanded=False):
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            max_drivers = st.number_input("Max drivers", 1, 20, 6, key="rp_max_drivers")
+        with c2:
+            max_stops_per_driver = st.number_input("Max stops per driver", 1, 20, 7, key="rp_max_stops")
+        with c3:
+            truck_capacity = st.number_input("Truck capacity (gal)", 100, 10000, 2000, 100, key="rp_capacity")
 
     with st.form("route_planner_form", clear_on_submit=False):
         depot_input = st.text_area("Depot address or coordinates", placeholder="123 Depot Rd or 40.7128,-74.0060", height=80)
@@ -202,12 +319,9 @@ def render_route_planner():
                     st.error("Invalid depot coordinates.")
                     return
             else:
-                if not _has_api_key():
-                    st.error("Geocoding requires GOOGLE_MAPS_API_KEY. Use coordinates.")
-                    return
                 depot_coords = geocode_address_sync(depot_input.strip())
                 if not depot_coords:
-                    st.error("Could not geocode depot.")
+                    st.error("Could not resolve depot.")
                     return
 
             processed = []
@@ -218,15 +332,12 @@ def render_route_planner():
                     coords = parse_coordinates(addr)
                     if coords:
                         processed.append({"id": i + 1, "address": addr, "lat": coords[0], "lon": coords[1], "gallons": g})
-                elif _has_api_key():
+                else:
                     geo = geocode_address_sync(addr)
                     if geo:
                         processed.append({"id": i + 1, "address": addr, "lat": geo[0], "lon": geo[1], "gallons": g})
                     else:
-                        st.warning(f"Could not geocode: {addr}")
-                else:
-                    st.error("Use coordinates or set API key.")
-                    return
+                        st.warning(f"Could not resolve: {addr}")
 
             if not processed:
                 st.error("No valid stops.")
@@ -236,6 +347,8 @@ def render_route_planner():
             plan = router.create_full_routing_plan(processed, use_google_optimization=_has_api_key())
 
             st.success(f"✅ {len([k for k in plan if k != 'summary'])} route(s)")
+            if not _has_api_key():
+                st.caption("Using demo coordinates and synthetic travel times.")
             for key in sorted(plan.keys()):
                 if key == "summary":
                     continue
@@ -263,21 +376,24 @@ def render_route_planner():
 
 # ---- Requests ----
 def render_requests():
-    st.header("📋 Requests")
-    st.markdown("Delivery requests. Select for batching on the Dashboard.")
+    if st.button("← Dashboard", key="req_back"):
+        st.session_state.page = "dashboard"
+        st.rerun()
+    st.header("Requests")
+    st.markdown("Delivery requests. Select ones to batch into routes on the Dashboard.")
 
     status_filter = st.selectbox("Filter", ["all", "pending", "assigned", "completed", "cancelled"], key="req_filter")
     status = None if status_filter == "all" else status_filter
     requests_list = requests_repo.list_requests(status=status)
 
     if not requests_list:
-        st.info("No requests. Use **Book** to add one.")
+        st.info("No requests. Customers can **Submit an order** from the home page.")
         return
 
     for r in requests_list:
         addr_short = (r.delivery_address[:50] + "…") if len(r.delivery_address) > 50 else r.delivery_address
         sel = st.checkbox(
-            f"**{r.id}** — {addr_short} — `{r.status}`",
+            f"{addr_short} — `{r.status}`",
             value=r.id in st.session_state.selected_request_ids,
             key=f"sel_{r.id}",
         )
@@ -291,80 +407,34 @@ def render_requests():
             st.markdown(f"Gallons: {r.order_quantity_gallons} · Priority: {r.delivery_priority}")
 
 
-# ---- Book ----
-def render_book():
-    st.header("📦 Book")
-    st.markdown("Submit a delivery request.")
-
-    with st.form("book_form"):
-        name = st.text_input("Customer name *")
-        email = st.text_input("Email *")
-        phone = st.text_input("Phone *")
-        address = st.text_area("Delivery address *")
-        fuel = st.selectbox("Fuel type", ["Heating Oil", "Diesel", "Kerosene", "Other"], key="fuel")
-        tank_loc = st.text_input("Tank location", placeholder="e.g. Basement")
-        gallons = st.number_input("Order quantity (gallons)", 0.0, 5000.0, 275.0, 25.0)
-        tank_empty = st.checkbox("Tank empty")
-        priority = st.selectbox("Priority", ["Standard", "Rush", "Emergency"], key="priority")
-        notes = st.text_area("Special considerations", placeholder="Optional")
-        pay = st.selectbox("Payment", ["Credit Card", "Check", "Cash", "Other"], key="pay")
-        submitted = st.form_submit_button("Submit booking")
-
-    if submitted:
-        if not all([name, email, phone, address]):
-            st.error("Fill required fields: name, email, phone, address.")
-            return
-        lat, lon = None, None
-        if _has_api_key():
-            geo = geocode_address_sync(address.strip())
-            if not geo:
-                st.error("Could not geocode address. Check it or set GOOGLE_MAPS_API_KEY.")
-                return
-            lat, lon = geo
-        else:
-            st.warning("No API key — request saved but without coordinates. It won’t be used for routing until geocoded.")
-
-        try:
-            req = requests_repo.create_request(
-                customer_name=name.strip(),
-                customer_email=email.strip(),
-                customer_phone=phone.strip(),
-                delivery_address=address.strip(),
-                lat=lat,
-                lon=lon,
-                fuel_type=fuel,
-                heating_unit_type="Furnace",
-                tank_location=tank_loc or "",
-                access_instructions=None,
-                current_tank_level="Unknown",
-                order_quantity_gallons=gallons,
-                tank_empty=tank_empty,
-                requested_delivery_date=None,
-                delivery_priority=priority,
-                special_considerations=notes or None,
-                payment_method=pay,
-            )
-            st.success(f"✅ Request {req.id} created. Track at `/customer/track/{req.id}`")
-        except Exception as e:
-            st.error(str(e))
-
-
-# ---- Dashboard (batch to routes) ----
+# ---- Dashboard ----
 def render_dashboard():
-    st.header("📊 Dashboard")
-    st.markdown("Create driver routes from selected pending requests.")
+    st.header("Admin Dashboard")
+    st.markdown("Manage delivery requests and plan routes.")
 
-    pending = [r for r in requests_repo.list_requests(status="pending") if r.lat is not None and r.lon is not None]
+    if st.button("🗺️ **Route Planner**", type="primary", use_container_width=True):
+        st.session_state.page = "route_planner"
+        st.rerun()
+    st.caption("Build optimized routes from depot and stops.")
+    st.markdown("<br>", unsafe_allow_html=True)
+    if st.button("📋 **Requests**", type="primary", use_container_width=True):
+        st.session_state.page = "requests"
+        st.rerun()
+    st.caption("View and select delivery requests.")
+
+    st.markdown("---")
+    st.subheader("Create routes from selected requests")
+
+    pending = [r for r in requests_repo.list_requests(status="pending") if r.lat and r.lon]
     drivers = drivers_repo.get_all_drivers()
 
     if not drivers:
         st.warning("No drivers in `data/drivers.json`. Add drivers first.")
         return
     if not pending:
-        st.info("No pending requests with coordinates. Use **Book** (with API key) to add geocoded requests.")
+        st.info("No pending requests with coordinates. Use **Submit an order** to add requests (demo coords when API unavailable).")
         return
 
-    # Use selected IDs; default to all pending
     eligible_ids = {r.id for r in pending}
     selected = set(st.session_state.selected_request_ids) & eligible_ids
     if not selected:
@@ -392,16 +462,14 @@ def render_dashboard():
             stops_fc.append({"id": sid, "lat": r.lat, "lon": r.lon, "address": r.delivery_address})
             req_map[sid] = r
 
-        if _has_api_key():
-            dep_coords = geocode_address_sync(depot.strip())
-            if not dep_coords:
-                st.error("Could not geocode depot.")
-                return
-            depot_loc = dep_coords
-            depot_str = depot.strip()
-        else:
-            depot_loc = (40.7589, -73.9851)
-            depot_str = "40.7589,-73.9851"
+        dep_coords = geocode_address_sync(depot.strip())
+        if not dep_coords:
+            st.error("Could not resolve depot.")
+            return
+        depot_loc = dep_coords
+        depot_str = depot.strip()
+        if not _has_api_key():
+            st.caption("Using demo coordinates and synthetic travel times.")
 
         router = DeliveryRouter(depot_loc, num_trucks=min(max_d, len(drivers)), max_stops_per_truck=max_s)
         clusters = router.cluster_stops(stops_fc)
@@ -419,16 +487,9 @@ def render_dashboard():
                 r = req_map.get(s["id"])
                 if r:
                     enriched.append({
-                        "id": r.id,
-                        "address": r.delivery_address,
-                        "lat": r.lat,
-                        "lon": r.lon,
-                        "service_minutes": 20,
-                        "access_instructions": r.access_instructions,
-                        "gate_code": None,
-                        "tank_location": r.tank_location,
-                        "customer_notes": r.special_considerations,
-                        "payment_required": False,
+                        "id": r.id, "address": r.delivery_address, "lat": r.lat, "lon": r.lon,
+                        "service_minutes": 20, "access_instructions": r.access_instructions, "gate_code": None,
+                        "tank_location": r.tank_location, "customer_notes": r.special_considerations, "payment_required": False,
                     })
             addrs = [e["address"] for e in enriched]
             link = multi_stop_link(depot_str, addrs)
@@ -452,29 +513,18 @@ def render_dashboard():
                 st.session_state.selected_request_ids.remove(r.id)
 
 
-# ---- Main: inject Quinn-style CSS + hero ----
-st.markdown(QUINN_CSS, unsafe_allow_html=True)
-hero_html = """
-<div class="quinn-hero">
-  <div class="logo">Load Logic <span class="est">Est. 1995</span></div>
-  <div class="tagline">Affordable, dependable, quick heating oil delivery. Family-run, reliable delivery and exceptional customer service at competitive prices.</div>
-</div>
-"""
-st.markdown(hero_html, unsafe_allow_html=True)
-_hero_img = os.path.join(os.path.dirname(__file__), "app", "static", "images", "rs=w_1160,h_870.webp")
-if os.path.isfile(_hero_img):
-    st.image(_hero_img, use_container_width=True, caption="Heating oil delivery — here for you when you need us.")
-
-# ---- Page content ----
-if page == "Route Planner":
-    render_route_planner()
-elif page == "Requests":
-    render_requests()
-elif page == "Book":
+# ---- Main content ----
+if page == "landing":
+    render_landing()
+elif page == "book":
     render_book()
-else:
+elif page == "dashboard":
     render_dashboard()
+elif page == "route_planner":
+    render_route_planner()
+else:
+    render_requests()
 
-# ---- Footer (Quinn-style) ----
+# ---- Footer ----
 st.markdown("---")
 st.caption("© 2025 Load Logic — All Rights Reserved. Affordable, dependable, quick heating oil delivery.")
